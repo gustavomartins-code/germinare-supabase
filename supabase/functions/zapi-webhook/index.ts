@@ -41,6 +41,9 @@ serve(async (req: Request) => {
     (body.location ? "[localização]" : null) ??
     null;
 
+  // Salva a URL do áudio para transcrição posterior no pipeline
+  const audioUrl = (body.audio as any)?.audioUrl ?? null;
+
   // Determina o tipo da mensagem
   const messageType = body.text
     ? "text"
@@ -77,6 +80,7 @@ serve(async (req: Request) => {
     is_group: (body.isGroup as boolean) ?? false,
     forwarded: (body.forwarded as boolean) ?? false,
     is_edit: (body.isEdit as boolean) ?? false,
+    audio_url: audioUrl,
     // momment é o campo correto da Z-API (typo histórico deles)
     sent_at: new Date(body.momment as number).toISOString(),
   };

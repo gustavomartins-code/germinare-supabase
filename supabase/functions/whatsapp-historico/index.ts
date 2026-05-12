@@ -26,7 +26,7 @@ serve(async (req: Request) => {
 
   let query = supabase
     .from("whatsapp_messages")
-    .select("sent_at, from_me, sender_name, sender_phone, connected_phone, chat_name, message_text, message_type, is_group, phone")
+    .select("sent_at, from_me, sender_name, sender_phone, connected_phone, chat_name, message_text, message_type, is_group, phone, audio_url")
     .gte("sent_at", dayStart)
     .lt("sent_at", new Date(new Date(dayStart).getTime() + 24 * 60 * 60 * 1000).toISOString())
     .order("sent_at", { ascending: true });
@@ -84,6 +84,7 @@ function formatMsg(msg: any) {
     chat: msg.chat_name || msg.phone,
     tipo: msg.message_type,
     texto: msg.message_text,
+    audio_url: msg.audio_url ?? null,
     grupo: msg.is_group,
   };
 }
