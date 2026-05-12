@@ -1,0 +1,20 @@
+# Dados de conversas — contêm mensagens reais de clientes
+data_chats.json
+data_hoje.json
+tr_*.txt
+tr2_*.txt
+f2_prompt.txt
+salescoach_email_body.txt
+
+# Outputs gerados (podem ser regerados pelo pipeline)
+salescoach.html
+whatsapp-viewer.html
+
+# Supabase secrets e temp
+supabase/.temp/
+*.env
+.env.local
+
+# Python
+__pycache__/
+*.pyc
