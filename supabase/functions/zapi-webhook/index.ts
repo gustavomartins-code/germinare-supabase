@@ -48,7 +48,11 @@ serve(async (req: Request) => {
 
       const connectedPhone: string = (body.sender ?? "").split("@")[0];
       const senderName: string | null = fromMe ? null : (data.pushName ?? null);
-      const chatName: string = data.groupMetadata?.subject ?? (fromMe ? null : data.pushName) ?? phone;
+      // Para from_me=true, chatName deve ser o pushName do contato (quem está recebendo)
+      // data.pushName em mensagens enviadas pode vir vazio — usar phone como fallback mas
+      // tentar preservar o nome do contato via data.verifiedBizName ou data.notify
+      const contactName: string | null = data.pushName ?? data.verifiedBizName ?? data.notify ?? null;
+      const chatName: string = data.groupMetadata?.subject ?? contactName ?? phone;
 
       let messageText: string | null = null;
       let audioUrl: string | null = null;
