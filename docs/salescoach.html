@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SalesCoach AI — Germinare</title>
+<title>SalesCoach AI - Germinare</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
   :root{--bg:#0d0f12;--surface:#161a1f;--surface2:#1e2329;--border:#2a2f38;--text:#e8ecf0;--muted:#6b7a8d;--accent:#25d366;--accent2:#128c7e;--warn:#f59e0b;--danger:#ef4444;--info:#3b82f6;--highlight:rgba(37,211,102,0.12)}
@@ -90,151 +90,130 @@
   .improve-title{font-size:12px;font-weight:600;margin-bottom:4px}
   .improve-text{font-size:11px;color:var(--muted);margin-bottom:5px;line-height:1.4}
   .improve-tip{font-size:11px;color:#b0bac6;background:rgba(255,255,255,.03);border-radius:4px;padding:5px 8px;border:1px solid var(--border);line-height:1.4}
-  .il-good{color:var(--accent)}
-  .il-warn{color:var(--warn)}
-  .il-bad{color:var(--danger)}
+  .il-good{color:var(--accent)} .il-warn{color:var(--warn)} .il-bad{color:var(--danger)}
   .obj-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px}
   .obj-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:2px 6px;border-radius:4px;flex-shrink:0;margin-top:1px}
   .obj-label.dada{background:rgba(239,68,68,.15);color:var(--danger)}
   .obj-label.ideal{background:rgba(37,211,102,.15);color:var(--accent)}
   .placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:12px;color:var(--muted)}
-  .placeholder-icon{font-size:40px;opacity:.3}
-  .placeholder-text{font-size:13px}
 </style>
 </head>
 <body>
 <div class="topbar">
   <div class="topbar-brand">
-    <div class="topbar-logo">🌱</div>
-    <div class="topbar-title">SalesCoach <span>AI</span> — Germinare</div>
+    <div class="topbar-logo">&#127807;</div>
+    <div class="topbar-title">SalesCoach <span>AI</span> &mdash; Germinare</div>
   </div>
   <div class="topbar-meta">
-    <span class="pill">📅 2026-05-13</span>
-    <span class="pill">✶ 1 negociação de 9 contatos</span>
+    <span class="pill">&#128197; 2026-05-13</span>
+    <span class="pill">&#10022; 10 contatos analisados</span>
   </div>
 </div>
 <div class="app-layout">
   <div class="conv-list">
     <div class="conv-list-header">
-      <h3>Negociações do Dia</h3>
+      <h3>Conversas do Dia</h3>
       <div class="search-box">
-        <span style="color:var(--muted);font-size:13px">🔍</span>
-        <input type="text" placeholder="Buscar conversa..." id="searchInput" oninput="filterList()">
+        <span style="color:var(--muted);font-size:13px">&#128269;</span>
+        <input type="text" placeholder="Buscar..." id="searchInput" oninput="filterList()">
       </div>
     </div>
     <div class="conv-items" id="convList"></div>
   </div>
   <div class="conv-main" id="convMain">
-    <div class="placeholder">
-      <div class="placeholder-icon">💬</div>
-      <div class="placeholder-text">Selecione uma negociação</div>
-    </div>
+    <div class="placeholder"><div style="font-size:40px;opacity:.3">&#128172;</div><div style="font-size:13px">Selecione uma conversa</div></div>
   </div>
-  <div class="synthesis-panel" id="synthPanel">
+  <div class="synthesis-panel">
     <div class="synth-header">
-      <h3>Análise IA</h3>
-      <div style="font-size:12px;color:var(--muted)">— <span id="synthName">Selecione</span></div>
+      <h3>Analise IA</h3>
+      <div style="font-size:12px;color:var(--muted)">&mdash; <span id="synthName">Selecione</span></div>
     </div>
     <div class="synth-body" id="synthBody">
-      <div style="padding:20px 0;text-align:center;color:var(--muted);font-size:12px">Selecione uma conversa para ver a análise</div>
+      <div style="padding:20px 0;text-align:center;color:var(--muted);font-size:12px">Selecione uma conversa</div>
     </div>
   </div>
 </div>
 <script>
-var CONVS=[{"id": 0, "chat": "Fabricio", "score": 4.5, "status": "Travado", "scoreLabel": "Baixa resolutividade e perda de ritmo", "summary": "A vendedora iniciou uma tentativa de fechamento de 90t, mas perdeu o controle da negociação ao delegar a resolução de um entrave burocrático ao próprio parceiro. A falta de proatividade em resolver a dúvida do fornecedor travou o fluxo da venda principal.", "vendedor": "Vanessa", "produto": "DDGS", "metrics": {"respostaMed": "58min", "objecoes": "1", "conversao": "Não", "msgs": "10"}, "improvements": [{"type": "bad", "label": "🚨 Melhora Urgente", "title": "Terceirização da Solução", "text": "Ao dizer 'fala com o lele', a vendedora transfere a responsabilidade de resolver um problema para o parceiro, perdendo a posição de facilitadora.", "tip": "Como broker, você deve ser o ponto de convergência. Busque a resposta internamente e retorne com a solução pronta para o fornecedor.", "msgRef": "flaa com o lele"}, {"type": "warn", "label": "⚠️ Atenção", "title": "Perda do Gancho de Venda", "text": "A proposta de fechamento das 90 toneladas foi abandonada no momento em que surgiu o questionamento sobre a revenda.", "tip": "Sempre ancore a resolução de uma dúvida técnica ao fechamento do pedido pendente: 'Vou resolver isso agora com o Lele e já confirmamos as 90t'.", "msgRef": "Levamos o 1200?"}], "objecoes": [{"objecao": "Restrição de processo para ensaque e revenda de DDGS para cooperados.", "resposta_dada": "Informou que estava 'barrado' e delegou o contato para terceiros.", "resposta_ideal": "Entendo a necessidade da cooperativa. Vou verificar agora com o jurídico/comercial se abrimos exceção para esse volume e te aviso em 10 minutos para fecharmos as 90t também."}], "followupMsg": "Fabricio, já agilizei aqui internamente sobre a questão da revenda para a cooperativa e tenho um caminho. Vamos fechar as 90t no R$ 1.200 agora para eu já garantir esse lote enquanto finalizamos o processo de Maceió?", "initials": "FA", "avatarGrad": "linear-gradient(135deg,#3b3b6b,#5b5baa)", "time": "11:17", "preview": "como que ficou", "msgs": 10, "tags": ["DDGS", "Travado"], "messages": [{"from_me": true, "sender": "Vanessa", "time": "08:40", "text": "Leandro precisava chegar esse aqui a R$1.180 hein , fechar 90 ton"}, {"from_me": true, "sender": "Vanessa", "time": "08:41", "text": "Levamos o 1200?"}, {"from_me": true, "sender": "Vanessa", "time": "08:41", "text": "Bom dia"}, {"from_me": false, "sender": "Fabricio", "time": "08:44", "text": "[unknown]"}, {"from_me": false, "sender": "Fabricio", "time": "10:36", "text": "Senhora preciso saber como fica o processo de revenda do ddgs , eu capitei uma cooperativa em Maceió eles querem comprar tanto para consumo próprio deles na produçao de raçao deles porém eles querem ensacar esse produto para revender para os cooperados"}, {"from_me": true, "sender": "Vanessa", "time": "10:44", "text": "a priori estava barrado"}, {"from_me": true, "sender": "Vanessa", "time": "10:44", "text": "flaa com o lele"}, {"from_me": false, "sender": "Fabricio", "time": "10:49", "text": "blz"}, {"from_me": true, "sender": "Vanessa", "time": "11:17", "text": "me avisa dps"}, {"from_me": true, "sender": "Vanessa", "time": "11:17", "text": "como que ficou"}]}];
-function esc(s){if(!s)return '';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+var CONVS=[{"id": 0, "chat": "Conrado Zanon", "score": 9.0, "scoreLabel": "Lead alta intencao", "summary": "Cliente solicitou cotacao de precos diretamente. Oportunidade clara para coletar BID e negociar com fornecedores.", "status": "Em andamento", "vendedor": "Desconhecido", "produto": "Graos/Racoes", "metrics": {"respostaMed": "N/A", "objecoes": "0", "conversao": "Nao", "msgs": "1"}, "improvements": [{"type": "bad", "label": "Melhora Urgente", "title": "Sem resposta ao pedido de preco", "text": "Conrado pediu preco diretamente e nao ha registro de resposta. Cada minuto sem resposta e chance de perder para concorrente.", "tip": "Responda em menos de 5 minutos: 'Conrado, qual produto e volume? Te passo o melhor preco do dia agora.'", "msgRef": "Tem preco ai"}], "objecoes": [], "followupMsg": "Bom dia Conrado! Qual produto e volume voce precisa? Te passo o melhor preco disponivel hoje agora.", "initials": "CZ", "avatarGrad": "linear-gradient(135deg,#1a5276,#17a589)", "time": "10:17", "preview": "Tem preço aí", "msgs": 1, "tags": ["Preco", "Em andamento"], "messages": [{"from_me": false, "sender": "Conrado Zanon", "time": "10:17", "text": "Tem preço aí"}]}, {"id": 1, "chat": "Cristiane Rocha", "score": 8.5, "scoreLabel": "Agendamento rapido e direto", "summary": "A vendedora conduziu o agendamento de uma reuniao para sexta-feira de forma eficiente e cordial. Status de avanco no funil, aguardando a qualificacao da demanda no encontro marcado.", "status": "Em andamento", "vendedor": "Vanessa", "produto": "Graos e Racoes", "metrics": {"respostaMed": "17min", "objecoes": "0", "conversao": "Parcial", "msgs": "9"}, "improvements": [{"type": "good", "label": "Ponto Forte", "title": "Confirmacao de agenda", "text": "Cristiane respondeu 'vou travar aqui', demonstrando organizacao e valorizacao do tempo de ambas.", "tip": "Sempre que agendar, envie um convite de calendario para reduzir a taxa de no-show.", "msgRef": "vou travar aqui"}, {"type": "warn", "label": "Atencao", "title": "Gatilho de interesse", "text": "A conversa focou apenas no horario, sem mencionar uma oportunidade especifica de mercado ou produto.", "tip": "Tente antecipar um beneficio: 'Quero te mostrar uma ponta de DDG que abriu hoje com preco agressivo'.", "msgRef": "Qual o melhor horario pra vc?"}], "objecoes": [], "followupMsg": "Cristiane, confirmadissimo nosso papo sexta as 09:30. Ja separei as cotacoes atualizadas de DDG e milho para te passar. Ate logo!", "initials": "CR", "avatarGrad": "linear-gradient(135deg,#784212,#d35400)", "time": "10:33", "preview": "[unknown]", "msgs": 9, "tags": ["Agenda", "Em andamento"], "messages": [{"from_me": false, "sender": "Cristiane Rocha", "time": "09:52", "text": "Oieee, bom dia, joia?"}, {"from_me": false, "sender": "Cristiane Rocha", "time": "09:52", "text": "Nessa sexta você tem um tempinho cedo? Qual o melhor horário pra vc?"}, {"from_me": true, "sender": "Vanessa", "time": "10:12", "text": "Oie bom dia"}, {"from_me": true, "sender": "Vanessa", "time": "10:12", "text": "Td joia e vc?"}, {"from_me": true, "sender": "Vanessa", "time": "10:13", "text": "Tenho sim"}, {"from_me": true, "sender": "Vanessa", "time": "10:13", "text": "Pode ser as 9:30?"}, {"from_me": false, "sender": "Cristiane Rocha", "time": "10:27", "text": "[unknown]"}, {"from_me": false, "sender": "Cristiane Rocha", "time": "10:28", "text": "Pode..vou travar aqui"}, {"from_me": true, "sender": "Vanessa", "time": "10:33", "text": "[unknown]"}]}, {"id": 2, "chat": "Gustavo Estagiario Sorna", "score": 7.5, "scoreLabel": "Alinhamento interno em progresso", "summary": "O estagiario apresenta a proposta de valor do BidPulse/SalesCoach para revisao da gestao. Vanessa realiza um ajuste tecnico na terminologia, refinando o posicionamento da Germinare.", "status": "Em andamento", "vendedor": "Gustavo", "produto": "BidPulse / SalesCoach", "metrics": {"respostaMed": "6min", "objecoes": "0", "conversao": "Parcial", "msgs": "3"}, "improvements": [{"type": "good", "label": "Ponto Forte", "title": "Contextualizacao clara", "text": "O estagiario conseguiu resumir bem o volume e a dor da mesa de vendas da Germinare.", "tip": "Utilize esses numeros (10 agentes, 400 clientes) como prova social na abordagem externa.", "msgRef": "centenas de negociacoes"}, {"type": "warn", "label": "Atencao", "title": "Precisao de conceito", "text": "Vanessa corrigiu 'vendedores' por 'agentes' e 'vendas' por 'intermediacao', crucial no modelo de corretagem.", "tip": "No mercado de graos, 'intermediacao' traz mais seguranca juridica e clareza sobre o papel do broker.", "msgRef": "intermediacao de vendas"}], "objecoes": [], "followupMsg": "Vanessa, perfeito o ajuste. Ja alterei para 'agentes' e 'intermediacao'. Podemos avancar com esse texto para a apresentacao oficial ou gostaria de ajustar mais algum detalhe?", "initials": "GS", "avatarGrad": "linear-gradient(135deg,#1b2631,#566573)", "time": "10:55", "preview": "A Germinare opera intermediação de vendas com 10 agentes ati", "msgs": 3, "tags": ["BidPulse", "Interno"], "messages": [{"from_me": false, "sender": "Gustavo Sorna", "time": "10:44", "text": "[image]"}, {"from_me": false, "sender": "Gustavo Sorna", "time": "10:46", "text": "BidPulse — Inteligência de Vendas em Tempo Real para o Agronegócio\n\nA Germinare opera uma mesa de vendas com 10 vendedores ativos, ~400 clientes e centenas de negociações acontecendo simultaneamente via WhatsApp todos os dias. O problema: o gestor não tem visibilidade do que está acontecendo nas conversas até que o negócio já foi perdido.\n\nBidPulse é um sistema de inteligência comercial que captura automaticamente todas as conversas de WhatsApp dos vendedores, processa cada uma com IA e entrega, todas as manhãs, um relatório completo e acionável — sem que nenhum vendedor precise fazer nada diferente.\n\nO pipeline funciona em três estágios. O primeiro é um filtro estrutural que elimina conversas irrelevantes. O segundo usa um modelo de linguagem para identificar, em lote, quais conversas contêm negociação real — menção a preço, volume, BID, proposta ou objeção. O terceiro avalia cada negociação individualmente, gerando um score de 0 a 10, identificando objeções levantadas, avaliando como o vendedor reagiu, e propondo uma mensagem de follow-up pronta para envio imediato.\n\nO resultado chega por e-mail com um resumo visual das negociações do dia e um link para um painel interativo onde o gestor consegue ler a transcrição completa de cada conversa, ver os pontos fortes e as falhas de cada vendedor destacados diretamente nas mensagens, e copiar o follow-up sugerido com um clique.\n\nO sistema já está em produção. Ontem, 13 de maio de 2026, processou 55 contatos, identificou 6 negociações reais e entregou o relatório com avaliação completa de cada uma — tudo de forma automática, sem intervenção humana, em menos de 5 minutos.\n\nO impacto direto é duplo: o gestor recupera negociações que estavam se perdendo em silêncio, e os vendedores recebem feedback específico e contextualizado sobre cada conversa — não uma avaliação genérica, mas uma análise do que foi dito, quando e como deveria ter sido diferente."}, {"from_me": true, "sender": "Vanessa", "time": "10:55", "text": "A Germinare opera intermediação de vendas com 10 agentes ativos e centenas de negociações acontecendo simultaneamente via WhatsApp diariamente. O problema: o gestor não tem visibilidade do que está acontecendo nas conversas até que o negócio ser concluído ou perdido.\n\nNossa solução, criada a partir do G4OS, captura automaticamente todas as conversas de WhatsApp dos vendedores, processa cada uma com IA e entrega, todas as manhãs, um relatório completo.\n\nO pipeline funciona em três estágios: \n1. Filtro estrutural que elimina conversas irrelevantes. \n2. ⁠Usa um modelo de linguagem para identificar, em lote, quais conversas contêm negociação real (menção a preço, volume, produto, BID, proposta ou objeção).\n3. ⁠ Avalia cada negociação individualmente, gerando um score de 0 a 10, identificando objeções levantadas, avaliando como o vendedor reagiu, com um resumo analítico sobre a negociação e propondo uma mensagem de follow-up pronta para envio imediato.\n4. ⁠Enviado por e-mail um consolidado visual das negociações do dia e um link para um painel interativo onde o gestor consegue ler a transcrição completa de cada conversa, ver os pontos fortes e as falhas de cada vendedor destacados diretamente nas mensagens, e o follow-up sugerido.\n\nO sistema já está em produção. Ontem, processou 55 contatos, identificou 6 negociações reais e entregou o relatório com avaliação completa de cada uma — tudo de forma automática, sem intervenção humana, em menos de 5 minutos.\n\nO impacto direto é duplo: o gestor recupera negociações que estavam se perdendo em silêncio, e os vendedores recebem feedback específico e contextualizado sobre cada conversa com oportunidade de desenvolvimento — não uma avaliação genérica, mas uma análise do que foi dito, quando e como deveria ter sido diferente."}]}, {"id": 3, "chat": "Murilo Consult", "score": 7.2, "scoreLabel": "Transicao de carteira ativa", "summary": "O consultor Murilo iniciou a cobertura de ferias da Milena apresentando-se formalmente aos clientes via texto. A gestao orientou o uso de ligacoes telefonicas para maior efetividade na captura de demandas.", "status": "Em andamento", "vendedor": "Murilo Venancio", "produto": "Commodities (Graos)", "metrics": {"respostaMed": "2min", "objecoes": "0", "conversao": "Nao", "msgs": "10"}, "improvements": [{"type": "good", "label": "Ponto Forte", "title": "Abordagem estruturada", "text": "A mensagem de apresentacao foi clara, educada e ja incluiu entrega de valor atraves do resumo de mercado.", "tip": "Mantenha o envio de resumos de mercado, pois isso posiciona o broker como consultor e nao apenas tomador de pedido.", "msgRef": "faco parte do time de consultores"}, {"type": "warn", "label": "Atencao", "title": "Baixa atividade telefonica", "text": "O vendedor optou apenas pelo contato via mensagem, o que pode ser ignorado facilmente em um mercado dinamico de graos.", "tip": "Siga a orientacao da Vanessa e faca ligacoes curtas para sentir o pulso do cliente e buscar BIDs imediatos.", "msgRef": "Nao liguei para o pessoal"}], "objecoes": [], "followupMsg": "Fala Elton, beleza? Conforme te mandei no resumo cedo, o mercado deu uma movimentada no premio. Consegue falar 2 minutinhos por telefone para eu entender sua necessidade de farelo/milho para essa quinzena?", "initials": "MV", "avatarGrad": "linear-gradient(135deg,#1a5276,#2e86c1)", "time": "08:42", "preview": "*boa", "msgs": 10, "tags": ["Graos", "Em andamento"], "messages": [{"from_me": false, "sender": "Murilo Venâncio", "time": "08:10", "text": "Oi Vanessa, bom dia!!\nNão liguei para o pessoal, mas me apresentei pra todos eles na call de marcado com a central rede."}, {"from_me": false, "sender": "Murilo Venâncio", "time": "08:10", "text": "Vou deixar aqui também o modelo das mensagens que mandei pra eles"}, {"from_me": false, "sender": "Murilo Venâncio", "time": "08:12", "text": "Elton, bom dia! Meu nome é Murilo, faço parte do time de consultores da Germinare, tudo bem com você?\n\nAcho que a Milena comentou com você que vou ficar no lugar dela, durante essa semana e a próxima. Ela pegou 15 dias de férias.\n\nEu vou deixar aqui na conversa um breve resumo do mercado e a nossa atualização, ok? E se você precisar de alguma commodity ou tiver alguma dúvida em relaçãoao mercado, pode me chamar aqui, combinado?"}, {"from_me": true, "sender": "Vanessa", "time": "08:39", "text": "Bom dia"}, {"from_me": true, "sender": "Vanessa", "time": "08:39", "text": "Blzzz"}, {"from_me": true, "sender": "Vanessa", "time": "08:40", "text": "As vezes amanha ou segunda vale uma ligada pra turma"}, {"from_me": false, "sender": "Murilo Venâncio", "time": "08:40", "text": "E ai na sequencia mandei um resumo pra eles e a atualização da recomendação"}, {"from_me": false, "sender": "Murilo Venâncio", "time": "08:40", "text": "OK OK!"}, {"from_me": true, "sender": "Vanessa", "time": "08:42", "text": "Bos"}, {"from_me": true, "sender": "Vanessa", "time": "08:42", "text": "*boa"}]}, {"id": 4, "chat": "Muriel", "score": 6.5, "scoreLabel": "Alinhamento interno reativo", "summary": "A conversa foca na resolucao de uma pendencia interna entre o financeiro e a vendedora. Vanessa demonstra agilidade ao escalar a situacao para o Conrado imediatamente.", "status": "Em andamento", "vendedor": "Vanessa", "produto": "N/A (Interno)", "metrics": {"respostaMed": "7min", "objecoes": "0", "conversao": "Nao", "msgs": "9"}, "improvements": [{"type": "good", "label": "Ponto Forte", "title": "Escalacao imediata", "text": "A vendedora nao reteve a informacao e acionou prontamente o responsavel interno.", "tip": "Mantenha esse fluxo para garantir que problemas operacionais nao travem o fechamento do BID.", "msgRef": "ja avisei o conrado"}, {"type": "warn", "label": "Atencao", "title": "Informalidade e clareza", "text": "A comunicacao e estritamente informal e depende de audios, o que dificulta o registro historico.", "tip": "Sempre que receber um audio com orientacoes, resuma os pontos principais em texto para confirmacao.", "msgRef": "E cada uma"}], "objecoes": [], "followupMsg": "Muriel, o Conrado ja deu algum retorno sobre aquele ponto do audio que voce me mandou?", "initials": "MU", "avatarGrad": "linear-gradient(135deg,#512e5f,#8e44ad)", "time": "09:28", "preview": "blza", "msgs": 9, "tags": ["Interno", "Em andamento"], "messages": [{"from_me": false, "sender": "Financeiro Germinare  - Muriell", "time": "08:59", "text": "[áudio]"}, {"from_me": true, "sender": "Vanessa", "time": "09:05", "text": "Bom dia"}, {"from_me": true, "sender": "Vanessa", "time": "09:05", "text": "Que beleza"}, {"from_me": true, "sender": "Vanessa", "time": "09:05", "text": "É cada uma"}, {"from_me": true, "sender": "Vanessa", "time": "09:05", "text": "Mas blz"}, {"from_me": true, "sender": "Vanessa", "time": "09:05", "text": "Vai me avisando"}, {"from_me": false, "sender": "Financeiro Germinare  - Muriell", "time": "09:07", "text": "combinado"}, {"from_me": true, "sender": "Vanessa", "time": "09:18", "text": "ja avisei o conrado"}, {"from_me": false, "sender": "Financeiro Germinare  - Muriell", "time": "09:28", "text": "blza"}]}, {"id": 5, "chat": "Fabricio", "score": 4.2, "scoreLabel": "Baixo foco comercial", "summary": "O vendedor ignorou uma oportunidade clara de fechamento de 90 toneladas para discutir processos operacionais. A conversa perdeu o timing da negociacao de preco e ficou estagnada em burocracia.", "status": "Travado", "vendedor": "Fabricio", "produto": "DDGS", "metrics": {"respostaMed": "42min", "objecoes": "1", "conversao": "Nao", "msgs": "12"}, "improvements": [{"type": "bad", "label": "Melhora Urgente", "title": "Ignorou gatilho de fechamento", "text": "A cliente enviou uma oferta de 1.200 para fechar 90 toneladas e o vendedor mudou de assunto sem responder sobre o preco.", "tip": "Sempre priorize o BID ou a intencao de fechamento antes de abrir novos topicos tecnicos ou operacionais.", "msgRef": "Levamos o 1200?"}, {"type": "warn", "label": "Atencao", "title": "Passividade na conducao", "text": "Respostas monossilabicas como 'blz' e 'sim' retiram a autoridade do broker na negociacao.", "tip": "Substitua confirmacoes curtas por prazos de retorno e proximos passos claros.", "msgRef": "blz"}], "objecoes": [{"objecao": "Restricao de revenda e ensaque de DDGS pela usina/origem.", "resposta_dada": "Aceitou a barreira e disse que falaria com o terceiro (Leandro).", "resposta_ideal": "Questionar o volume potencial dessa cooperativa para tentar uma excecao comercial junto ao fornecedor baseada em escala."}], "followupMsg": "Fabricio, sobre as 90 toneladas de DDGS a R$1.200: conseguiu confirmar o preco? Se sim, vamos rodar o contrato. Ja estou em cima do Leandro para resolver a questao do ensaque para Maceio tambem.", "initials": "FA", "avatarGrad": "linear-gradient(135deg,#3b3b6b,#5b5baa)", "time": "11:22", "preview": "sim", "msgs": 12, "tags": ["DDGS", "Travado"], "messages": [{"from_me": true, "sender": "Vanessa", "time": "08:40", "text": "Leandro precisava chegar esse aqui a R$1.180 hein , fechar 90 ton"}, {"from_me": true, "sender": "Vanessa", "time": "08:41", "text": "Levamos o 1200?"}, {"from_me": true, "sender": "Vanessa", "time": "08:41", "text": "Bom dia"}, {"from_me": false, "sender": "Fabricio", "time": "08:44", "text": "[unknown]"}, {"from_me": false, "sender": "Fabricio", "time": "10:36", "text": "Senhora preciso saber como fica o processo de revenda do ddgs , eu capitei uma cooperativa em Maceió eles querem comprar tanto para consumo próprio deles na produçao de raçao deles porém eles querem ensacar esse produto para revender para os cooperados"}, {"from_me": true, "sender": "Vanessa", "time": "10:44", "text": "a priori estava barrado"}, {"from_me": true, "sender": "Vanessa", "time": "10:44", "text": "flaa com o lele"}, {"from_me": false, "sender": "Fabricio", "time": "10:49", "text": "blz"}, {"from_me": true, "sender": "Vanessa", "time": "11:17", "text": "me avisa dps"}, {"from_me": true, "sender": "Vanessa", "time": "11:17", "text": "como que ficou"}, {"from_me": false, "sender": "Fabricio", "time": "11:22", "text": "si"}, {"from_me": false, "sender": "Fabricio", "time": "11:22", "text": "sim"}]}, {"id": 6, "chat": "Thais Mesa", "score": 3.0, "scoreLabel": "Interacao interna informal", "summary": "A conversa registra um dialogo informal entre colegas sobre creditos ou comissoes internas. Nao ha elementos de negociacao B2B nesta amostra.", "status": "Em andamento", "vendedor": "Thais Camila", "produto": "N/A (Interno)", "metrics": {"respostaMed": "18min", "objecoes": "0", "conversao": "Nao", "msgs": "9"}, "improvements": [{"type": "warn", "label": "Atencao", "title": "Falta de contexto comercial", "text": "A conversa e estritamente administrativa/pessoal, dificultando a analise de performance em vendas.", "tip": "Sempre vincule a solicitacao de credito ao numero do contrato ou volume de graos negociado para rastreabilidade.", "msgRef": "Meu credit9"}, {"type": "good", "label": "Ponto Forte", "title": "Clima organizacional", "text": "A relacao entre o comercial e o suporte parece positiva e leve.", "tip": "Mantenha a boa relacao, mas formalize os pedidos de conferencia em canais especificos para evitar erros de calculo.", "msgRef": "escolher seu premio"}], "objecoes": [], "followupMsg": "Thais, os creditos estao sendo validados. Para agilizar, consegues me mandar o volume (ton) e o produto das ultimas cargas que voce fechou?", "initials": "TM", "avatarGrad": "linear-gradient(135deg,#145a32,#27ae60)", "time": "11:22", "preview": "pode escolher seu premio", "msgs": 9, "tags": ["Interno", "Em andamento"], "messages": [{"from_me": true, "sender": "Vanessa", "time": "09:17", "text": "enraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}, {"from_me": true, "sender": "Vanessa", "time": "09:17", "text": "quem ta devendo quem agoraaaaa?"}, {"from_me": false, "sender": "Thais Camila", "time": "11:21", "text": "Ve aii"}, {"from_me": false, "sender": "Thais Camila", "time": "11:21", "text": "Meu credit9"}, {"from_me": false, "sender": "Thais Camila", "time": "11:21", "text": "Pff"}, {"from_me": false, "sender": "Thais Camila", "time": "11:21", "text": "Dps dessa que vai chegqr"}, {"from_me": true, "sender": "Vanessa", "time": "11:22", "text": "vai vir maisss?"}, {"from_me": true, "sender": "Vanessa", "time": "11:22", "text": "hahaha"}, {"from_me": true, "sender": "Vanessa", "time": "11:22", "text": "pode escolher seu premio"}]}, {"id": 7, "chat": "559691197443", "score": 0.0, "scoreLabel": "Lead irrelevante administrativo", "summary": "O contato busca o departamento de Recursos Humanos. Nao apresenta qualquer potencial de conversao para o mercado de graos.", "status": "Perdido", "vendedor": "Desconhecido", "produto": "N/A", "metrics": {"respostaMed": "N/A", "objecoes": "0", "conversao": "Nao", "msgs": "2"}, "improvements": [], "objecoes": [], "followupMsg": "Este canal e exclusivo para negociacoes de graos e racoes. Para falar com o RH, por favor, entre em contato pelo e-mail institucional.", "initials": "?", "avatarGrad": "linear-gradient(135deg,#424949,#717d7e)", "time": "09:48", "preview": "falo no rh da germinareM", "msgs": 2, "tags": ["RH", "Perdido"], "messages": [{"from_me": false, "sender": "559691197443", "time": "09:48", "text": "bom dia"}, {"from_me": false, "sender": "559691197443", "time": "09:48", "text": "falo no rh da germinareM"}]}, {"id": 8, "chat": "49126389612716@lid", "score": 0.0, "scoreLabel": "Sem conteudo identificavel", "summary": "Conversa contem apenas mensagens de midia sem texto identificavel. Nao ha dados suficientes para analise comercial.", "status": "Perdido", "vendedor": "Desconhecido", "produto": "N/A", "metrics": {"respostaMed": "N/A", "objecoes": "0", "conversao": "Nao", "msgs": "2"}, "improvements": [], "objecoes": [], "followupMsg": "Ola! Vi que voce me enviou uma mensagem. Pode me dizer o que precisa?", "initials": "?", "avatarGrad": "linear-gradient(135deg,#424949,#717d7e)", "time": "10:57", "preview": "[unknown]", "msgs": 2, "tags": ["Sem dados", "Perdido"], "messages": [{"from_me": false, "sender": "Vanessa Germinare 🌱", "time": "10:57", "text": "[unknown]"}, {"from_me": false, "sender": "Vanessa Germinare 🌱", "time": "10:57", "text": "[unknown]"}]}, {"id": 9, "chat": "60262770032650@lid", "score": 0.0, "scoreLabel": "Sem conteudo identificavel", "summary": "Apenas 1 mensagem de tipo desconhecido sem texto. Impossivel analisar intencao comercial.", "status": "Perdido", "vendedor": "Desconhecido", "produto": "N/A", "metrics": {"respostaMed": "N/A", "objecoes": "0", "conversao": "Nao", "msgs": "1"}, "improvements": [], "objecoes": [], "followupMsg": "Ola! Pode me dizer o que precisa?", "initials": "?", "avatarGrad": "linear-gradient(135deg,#424949,#717d7e)", "time": "09:48", "preview": "[unknown]", "msgs": 1, "tags": ["Sem dados", "Perdido"], "messages": [{"from_me": false, "sender": "60262770032650@lid", "time": "09:48", "text": "[unknown]"}]}];
+function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function scoreColor(s){return s>=8?'var(--accent)':s>=6?'var(--warn)':'var(--danger)'}
 function scoreClass(s){return s>=8?'score-good':s>=6?'score-mid':'score-low'}
-function renderList(filter){
-  filter=(filter||'').toLowerCase();
-  var el=document.getElementById('convList');
-  el.innerHTML=CONVS.filter(function(c){return !filter||c.chat.toLowerCase().includes(filter)}).map(function(c){
-    var sc=scoreClass(c.score);
-    return '<div class="conv-item" id="ci-'+c.id+'" onclick="openConv('+c.id+')">'
-      +'<div class="conv-item-top"><span class="conv-name">'+esc(c.chat)+'</span><span class="conv-time">'+c.time+'</span></div>'
-      +'<div class="conv-preview">'+esc(c.preview)+'</div>'
-      +'<div class="conv-footer"><span class="score-badge '+sc+'">◆ '+c.score+'</span>'
-      +'<div class="tag-chips">'+c.tags.filter(Boolean).map(function(t){return '<span class="tag-chip">'+esc(t)+'</span>'}).join('')+'</div></div>'
-      +'</div>';
-  }).join('');
+function renderList(f){
+  f=(f||'').toLowerCase();
+  document.getElementById('convList').innerHTML=CONVS.filter(c=>!f||c.chat.toLowerCase().includes(f)).map(c=>
+    '<div class="conv-item" id="ci-'+c.id+'" onclick="openConv('+c.id+')">'
+    +'<div class="conv-item-top"><span class="conv-name">'+esc(c.chat)+'</span><span class="conv-time">'+c.time+'</span></div>'
+    +'<div class="conv-preview">'+esc(c.preview)+'</div>'
+    +'<div class="conv-footer"><span class="score-badge '+scoreClass(c.score)+'">&#9670; '+c.score+'</span>'
+    +'<div class="tag-chips">'+c.tags.map(t=>'<span class="tag-chip">'+esc(t)+'</span>').join('')+'</div></div></div>'
+  ).join('');
 }
 function filterList(){renderList(document.getElementById('searchInput').value)}
 function openConv(id){
-  document.querySelectorAll('.conv-item').forEach(function(e){e.classList.remove('active')});
-  var el=document.getElementById('ci-'+id);
-  if(el) el.classList.add('active');
-  var c=CONVS.find(function(x){return x.id===id});
-  if(!c) return;
-  var color=scoreColor(c.score);
+  document.querySelectorAll('.conv-item').forEach(e=>e.classList.remove('active'));
+  var el=document.getElementById('ci-'+id); if(el)el.classList.add('active');
+  var c=CONVS.find(x=>x.id===id); if(!c)return;
   var spClass='sp-'+c.status.replace(/ /g,'');
-  var main=document.getElementById('convMain');
-  main.innerHTML='<div class="conv-header"><div class="conv-header-left">'
+  document.getElementById('convMain').innerHTML=
+    '<div class="conv-header"><div class="conv-header-left">'
     +'<div class="contact-avatar" style="background:'+esc(c.avatarGrad)+'">'+esc(c.initials)+'</div>'
-    +'<div class="contact-info"><h4>'+esc(c.chat)+'</h4><p>'+esc(c.vendedor)+' · '+c.msgs+' msgs</p></div></div>'
+    +'<div class="contact-info"><h4>'+esc(c.chat)+'</h4><p>'+esc(c.vendedor)+' &middot; '+c.msgs+' msgs</p></div></div>'
     +'<span class="status-pill '+spClass+'">'+esc(c.status)+'</span></div>'
     +'<div class="messages-area" id="msgsArea">'
     +'<div class="day-sep"><div class="day-sep-line"></div><div class="day-sep-label">2026-05-13</div><div class="day-sep-line"></div></div>'
-    +(c.messages&&c.messages.length?c.messages.map(function(m){
+    +(c.messages&&c.messages.length?c.messages.map(m=>{
       var cls=m.from_me?'sent':'received';
-      return '<div class="msg-row '+cls+'">'
-        +'<div><div class="msg-meta">'+esc(m.sender)+' · '+esc(m.time)+'</div>'
+      return '<div class="msg-row '+cls+'"><div><div class="msg-meta">'+esc(m.sender)+' &middot; '+esc(m.time)+'</div>'
         +'<div class="msg-bubble">'+esc(m.text)+'</div></div></div>';
-    }).join(''):'<div style="text-align:center;color:var(--muted);font-size:12px;padding:20px">Mensagens não disponíveis</div>')
+    }).join(''):'<div style="text-align:center;color:var(--muted);font-size:12px;padding:20px">Sem mensagens</div>')
     +'</div>'
-    +'<div class="followup-area"><div class="followup-label">💬 Follow-up sugerido pela IA</div>'
+    +'<div class="followup-area"><div class="followup-label">&#128172; Follow-up sugerido pela IA</div>'
     +'<div class="followup-box"><span id="followupText">'+esc(c.followupMsg)+'</span>'
     +'<button class="copy-btn" onclick="copyFollowup()">Copiar</button></div></div>';
-  var msgsEl=document.getElementById('msgsArea');
-  if(msgsEl) msgsEl.scrollTop=msgsEl.scrollHeight;
+  var ma=document.getElementById('msgsArea'); if(ma)ma.scrollTop=ma.scrollHeight;
   renderSynth(c);
 }
 function renderSynth(c){
   document.getElementById('synthName').textContent=c.chat;
-  var color=scoreColor(c.score);
-  var pct=Math.round(c.score*10);
-  var sb=document.getElementById('synthBody');
-  sb.innerHTML='<div class="synth-section">'
-    +'<div class="score-display">'
+  var color=scoreColor(c.score), pct=Math.round(c.score*10);
+  document.getElementById('synthBody').innerHTML=
+    '<div class="synth-section"><div class="score-display">'
     +'<div class="score-num" style="color:'+color+'">'+c.score+'</div>'
     +'<div class="score-info"><div class="score-label" style="color:'+color+'">'+esc(c.scoreLabel)+'</div>'
     +'<div class="score-bar-bg"><div class="score-bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div></div></div>'
     +'<div class="summary-text">'+esc(c.summary)+'</div></div>'
-    +'<div class="synth-section"><h5>📊 Métricas</h5><div class="metrics-grid">'
-    +'<div class="metric-card"><div class="metric-label">Resposta Méd.</div><div class="metric-value">'+esc(c.metrics.respostaMed||'--')+'</div></div>'
-    +'<div class="metric-card"><div class="metric-label">Msgs</div><div class="metric-value">'+esc(c.metrics.msgs||c.msgs)+'</div></div>'
-    +'<div class="metric-card"><div class="metric-label">Objeções</div><div class="metric-value">'+esc(c.metrics.objecoes||'0')+'</div></div>'
-    +'<div class="metric-card"><div class="metric-label">Conversão</div><div class="metric-value">'+esc(c.metrics.conversao||'--')+'</div></div>'
+    +'<div class="synth-section"><h5>&#128202; Metricas</h5><div class="metrics-grid">'
+    +'<div class="metric-card"><div class="metric-label">Resp. Media</div><div class="metric-value">'+esc(c.metrics.respostaMed)+'</div></div>'
+    +'<div class="metric-card"><div class="metric-label">Msgs</div><div class="metric-value">'+esc(c.metrics.msgs)+'</div></div>'
+    +'<div class="metric-card"><div class="metric-label">Objecoes</div><div class="metric-value">'+esc(c.metrics.objecoes)+'</div></div>'
+    +'<div class="metric-card"><div class="metric-label">Conversao</div><div class="metric-value">'+esc(c.metrics.conversao)+'</div></div>'
     +'</div></div>'
-    +'<div class="synth-section"><h5>🎯 Análise</h5>'
-    +c.improvements.map(function(imp){
-      return '<div class="improve-item '+imp.type+'">'
-        +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">'
-        +'<span style="font-size:11px;font-weight:700" class="il-'+imp.type+'">'+esc(imp.label)+'</span></div>'
+    +(c.improvements&&c.improvements.length?
+      '<div class="synth-section"><h5>&#127919; Analise</h5>'
+      +c.improvements.filter(imp=>imp&&imp.type).map(imp=>
+        '<div class="improve-item '+imp.type+'">'
+        +'<span style="font-size:11px;font-weight:700" class="il-'+imp.type+'">'+esc(imp.label)+'</span>'
         +'<div class="improve-title">'+esc(imp.title)+'</div>'
         +'<div class="improve-text">'+esc(imp.text)+'</div>'
-        +'<div class="improve-tip">💡 '+esc(imp.tip)+'</div>'
-        +'</div>';
-    }).join('')+'</div>'
+        +'<div class="improve-tip">Dica: '+esc(imp.tip)+'</div></div>'
+      ).join('')+'</div>':'')
     +(c.objecoes&&c.objecoes.length?
-      '<div class="synth-section"><h5>🛡 Objeções</h5>'
-      +c.objecoes.map(function(o){
-        return '<div class="obj-card">'
-          +'<div style="font-size:12px;font-weight:600;margin-bottom:6px">'+esc(o.objecao)+'</div>'
-          +(o.resposta_dada?'<div style="display:flex;gap:6px;margin-bottom:4px;align-items:flex-start"><span class="obj-label dada">Como reagiu</span><span style="font-size:11px;color:#b0bac6;line-height:1.4;flex:1">'+esc(o.resposta_dada)+'</span></div>':'')
-          +(o.resposta_ideal?'<div style="display:flex;gap:6px;align-items:flex-start"><span class="obj-label ideal">Ideal</span><span style="font-size:11px;color:#b0bac6;line-height:1.4;flex:1">'+esc(o.resposta_ideal)+'</span></div>':'')
-          +'</div>';
-      }).join('')+'</div>'
-    :'');
+      '<div class="synth-section"><h5>&#128737; Objecoes</h5>'
+      +c.objecoes.map(o=>
+        '<div class="obj-card"><div style="font-size:12px;font-weight:600;margin-bottom:6px">'+esc(o.objecao)+'</div>'
+        +'<div style="display:flex;gap:6px;margin-bottom:4px;align-items:flex-start"><span class="obj-label dada">Como reagiu</span><span style="font-size:11px;color:#b0bac6;line-height:1.4;flex:1">'+esc(o.resposta_dada)+'</span></div>'
+        +'<div style="display:flex;gap:6px;align-items:flex-start"><span class="obj-label ideal">Ideal</span><span style="font-size:11px;color:#b0bac6;line-height:1.4;flex:1">'+esc(o.resposta_ideal)+'</span></div></div>'
+      ).join('')+'</div>':'');
 }
 function copyFollowup(){
   var text=document.getElementById('followupText').textContent;
-  navigator.clipboard.writeText(text).then(function(){
+  navigator.clipboard.writeText(text).then(()=>{
     var btn=document.querySelector('.copy-btn');
-    if(btn){btn.textContent='✓ Copiado';setTimeout(function(){btn.textContent='Copiar'},2000)}
+    if(btn){btn.textContent='Copiado';setTimeout(()=>btn.textContent='Copiar',2000)}
   });
 }
 renderList();
-if(CONVS.length>0) openConv(0);
+if(CONVS.length>0)openConv(0);
 </script>
 </body>
 </html>
