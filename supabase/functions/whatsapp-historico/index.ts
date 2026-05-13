@@ -12,20 +12,18 @@ serve(async (req: Request) => {
 
   const url = new URL(req.url);
   const sender_name = url.searchParams.get("sender_name");
-  const date = url.searchParams.get("date"); // YYYY-MM-DD, default = hoje (BRT)
+  const date = url.searchParams.get("date");
   const connected_phone = url.searchParams.get("connected_phone");
 
-  // Data no fuso Brasil (UTC-3)
   const targetDate = date ?? new Date(Date.now() - 3 * 60 * 60 * 1000)
     .toISOString()
     .slice(0, 10);
 
-  const dayStart = `${targetDate}T03:00:00.000Z`; // 00:00 BRT = 03:00 UTC
+  const dayStart = `${targetDate}T03:00:00.000Z`;
   const dayEnd = new Date(new Date(dayStart).getTime() + 24 * 60 * 60 * 1000).toISOString();
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-  // Paginar para buscar todos os registros sem limite de 500
   const allData: any[] = [];
   let page = 0;
   while (true) {
@@ -37,7 +35,6 @@ serve(async (req: Request) => {
       .order("sent_at", { ascending: true })
       .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
 
-    if (sender_name) query = query.ilike("sender_name", `%${sender_name}%`);
     if (connected_phone) query = query.eq("connected_phone", connected_phone);
 
     const { data, error } = await query;
@@ -49,7 +46,7 @@ serve(async (req: Request) => {
     page++;
   }
 
-  // Agrupa por chat_name
+  // Agrupa por chat_name — inclui mensagens from_me e from_contact
   if (!sender_name) {
     const grouped: Record<string, any[]> = {};
     for (const msg of allData) {
@@ -68,15 +65,33 @@ serve(async (req: Request) => {
         mensagens: msgs,
       }));
 
+    const totalMsgsIndividuais = summary.reduce((acc, c) => acc + c.total_msgs, 0);
     return json({
       date: targetDate,
       total_contatos: summary.length,
-      total_msgs: allData.length,
+      total_msgs: totalMsgsIndividuais,
       contatos: summary,
     });
   }
 
-  const msgs = allData.map(formatMsg);
+  // Filtro por sender_name: retorna msgs do contato E respostas da Vanessa (from_me=true) no mesmo chat
+  // Primeiro descobrir quais chat_names têm mensagens desse sender
+  const chatNames = new Set<string>();
+  for (const msg of allData) {
+    if (!msg.from_me && msg.sender_name && msg.sender_name.toLowerCase().includes(sender_name.toLowerCase())) {
+      const key = msg.chat_name || msg.phone || "desconhecido";
+      chatNames.add(key);
+    }
+  }
+
+  // Retornar TODAS as mensagens desses chats (incluindo from_me=true da Vanessa)
+  const msgs = allData
+    .filter(msg => {
+      const key = msg.chat_name || msg.phone || "desconhecido";
+      return chatNames.has(key);
+    })
+    .map(formatMsg);
+
   return json({ date: targetDate, sender_name, total_msgs: msgs.length, mensagens: msgs });
 });
 
@@ -86,6 +101,7 @@ function formatMsg(msg: any) {
   return {
     hora,
     de: msg.from_me ? "EU" : (msg.sender_name || msg.phone),
+    from_me: msg.from_me ?? false,
     chat: msg.chat_name || msg.phone,
     tipo: msg.message_type,
     texto: msg.message_text,
