@@ -2,438 +2,239 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SalesCoach AI — Germinare 2026-05-13</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SalesCoach AI — Germinare</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #0f1117;
-    --surface: #1a1d27;
-    --surface2: #222536;
-    --border: #2e3247;
-    --text: #e8eaf0;
-    --muted: #7b82a0;
-    --green: #22c55e;
-    --green-dark: #166534;
-    --amber: #f59e0b;
-    --red: #ef4444;
-    --blue: #3b82f6;
-    --accent: #22c55e;
-  }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-
-  /* TOPBAR */
-  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 52px; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; }
-  .topbar-logo { font-size: 17px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
-  .topbar-logo span.green { color: var(--green); }
-  .topbar-meta { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--muted); }
-  .topbar-meta .pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 4px 12px; color: var(--text); font-size: 13px; }
-  .topbar-meta .pill-green { background: rgba(34,197,94,.15); border-color: rgba(34,197,94,.3); color: var(--green); }
-
-  /* MAIN LAYOUT */
-  .layout { display: flex; flex: 1; overflow: hidden; }
-
-  /* LEFT SIDEBAR */
-  .sidebar { width: 300px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
-  .sidebar-header { padding: 16px; border-bottom: 1px solid var(--border); }
-  .sidebar-title { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-  .search-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
-  .search-box input { background: none; border: none; outline: none; color: var(--text); font-size: 13px; width: 100%; }
-  .sidebar-list { flex: 1; overflow-y: auto; }
-  .sidebar-list::-webkit-scrollbar { width: 4px; }
-  .sidebar-list::-webkit-scrollbar-track { background: transparent; }
-  .sidebar-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-
-  .conv-item { padding: 14px 16px; cursor: pointer; border-bottom: 1px solid var(--border); transition: background .15s; position: relative; }
-  .conv-item:hover { background: var(--surface2); }
-  .conv-item.active { background: rgba(34,197,94,.08); border-left: 3px solid var(--green); }
-  .conv-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
-  .conv-name { font-size: 14px; font-weight: 600; color: var(--text); }
-  .conv-time { font-size: 11px; color: var(--muted); }
-  .conv-preview { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 8px; }
-  .conv-tags { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-  .score-star { display: flex; align-items: center; gap: 3px; background: rgba(245,158,11,.15); border: 1px solid rgba(245,158,11,.3); border-radius: 10px; padding: 2px 7px; font-size: 12px; font-weight: 700; color: var(--amber); }
-  .tag { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 2px 8px; font-size: 11px; color: var(--muted); }
-  .status-tag { border-radius: 10px; padding: 2px 8px; font-size: 11px; font-weight: 600; }
-  .status-Fechado { background: rgba(34,197,94,.15); color: var(--green); border: 1px solid rgba(34,197,94,.3); }
-  .status-Em.andamento { background: rgba(59,130,246,.15); color: var(--blue); border: 1px solid rgba(59,130,246,.3); }
-  .status-Travado { background: rgba(245,158,11,.15); color: var(--amber); border: 1px solid rgba(245,158,11,.3); }
-  .status-Perdido { background: rgba(239,68,68,.15); color: var(--red); border: 1px solid rgba(239,68,68,.3); }
-
-  /* CHAT PANEL */
-  .chat-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); }
-  .chat-header { padding: 16px 20px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
-  .chat-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #166534, #22c55e); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #fff; flex-shrink: 0; }
-  .chat-header-info { flex: 1; }
-  .chat-header-name { font-size: 15px; font-weight: 700; }
-  .chat-header-sub { font-size: 12px; color: var(--muted); }
-  .chat-messages { flex: 1; overflow-y: auto; padding: 20px 16px; display: flex; flex-direction: column; gap: 6px; background: #1a1f2e; }
-  .chat-messages::-webkit-scrollbar { width: 4px; }
-  .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-  .date-sep { text-align: center; margin: 12px 0 6px; }
-  .date-sep span { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 4px 14px; font-size: 12px; color: var(--muted); }
-  .msg-row { display: flex; }
-  .msg-row.sent { justify-content: flex-end; }
-  .msg-row.recv { justify-content: flex-start; }
-  .bubble { max-width: 68%; padding: 8px 12px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
-  .msg-row.sent .bubble { background: #1d4a2f; border-radius: 12px 0 12px 12px; }
-  .msg-row.recv .bubble { background: var(--surface2); border-radius: 0 12px 12px 12px; }
-  .bubble-sender { font-size: 11px; font-weight: 700; margin-bottom: 3px; }
-  .msg-row.sent .bubble-sender { color: #4ade80; }
-  .msg-row.recv .bubble-sender { color: #60a5fa; }
-  .bubble-text { font-size: 14px; color: var(--text); line-height: 1.45; word-break: break-word; }
-  .bubble-time { font-size: 11px; color: var(--muted); text-align: right; margin-top: 4px; }
-
-  .followup-bar { padding: 12px 16px; background: var(--surface); border-top: 1px solid var(--border); flex-shrink: 0; }
-  .followup-label { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
-  .followup-label::before { content: "→"; color: var(--green); }
-  .followup-content { display: flex; align-items: center; gap: 10px; }
-  .followup-text { flex: 1; font-size: 13px; color: var(--text); background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; line-height: 1.4; }
-  .copy-btn { background: rgba(34,197,94,.15); border: 1px solid rgba(34,197,94,.3); color: var(--green); border-radius: 8px; padding: 8px 14px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: background .15s; }
-  .copy-btn:hover { background: rgba(34,197,94,.25); }
-
-  /* RIGHT PANEL */
-  .analysis-panel { width: 280px; flex-shrink: 0; background: var(--surface); border-left: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; }
-  .analysis-panel::-webkit-scrollbar { width: 4px; }
-  .analysis-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-  .ap-section { padding: 16px; border-bottom: 1px solid var(--border); }
-  .ap-label { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-  .score-ring-wrap { display: flex; align-items: center; gap: 14px; }
-  .score-ring { position: relative; width: 64px; height: 64px; flex-shrink: 0; }
-  .score-ring svg { transform: rotate(-90deg); }
-  .score-ring-val { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; }
-  .score-info-label { font-size: 15px; font-weight: 700; line-height: 1.3; }
-  .score-info-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-
-  .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .metric-cell { background: var(--surface2); border-radius: 8px; padding: 10px; }
-  .metric-val { font-size: 18px; font-weight: 800; }
-  .metric-val.green { color: var(--green); }
-  .metric-val.amber { color: var(--amber); }
-  .metric-val.red { color: var(--red); }
-  .metric-val.blue { color: var(--blue); }
-  .metric-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
-
-  .improvement-item { margin-bottom: 10px; background: var(--surface2); border-radius: 10px; padding: 12px; cursor: pointer; transition: background .15s; }
-  .improvement-item:hover { background: #2a2d42; }
-  .imp-header { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
-  .imp-badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; white-space: nowrap; flex-shrink: 0; }
-  .imp-badge.good { background: rgba(34,197,94,.15); color: var(--green); }
-  .imp-badge.warn { background: rgba(245,158,11,.15); color: var(--amber); }
-  .imp-badge.bad { background: rgba(239,68,68,.15); color: var(--red); }
-  .imp-title { font-size: 13px; font-weight: 700; color: var(--text); }
-  .imp-text { font-size: 12px; color: var(--muted); line-height: 1.4; }
-  .imp-tip { font-size: 12px; color: #60a5fa; margin-top: 6px; line-height: 1.4; }
-  .imp-detail { display: none; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
-  .improvement-item.open .imp-detail { display: block; }
-
-  .obj-item { background: var(--surface2); border-radius: 8px; padding: 12px; margin-bottom: 8px; }
-  .obj-q { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
-  .obj-row { font-size: 12px; margin-bottom: 3px; }
-  .obj-row span.label { color: var(--muted); }
-  .obj-row span.bad { color: var(--red); }
-  .obj-row span.good { color: var(--green); }
-
-  .sintese-text { font-size: 13px; color: var(--muted); line-height: 1.55; }
-
-  /* STATS BAR */
-  .stats-bar { display: flex; gap: 0; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; }
-  .stat-cell { flex: 1; padding: 10px 16px; border-right: 1px solid var(--border); text-align: center; }
-  .stat-cell:last-child { border-right: none; }
-  .stat-n { font-size: 20px; font-weight: 800; }
-  .stat-l { font-size: 11px; color: var(--muted); }
-
-  /* EMPTY STATE */
-  .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--muted); gap: 8px; }
-  .empty-state .big { font-size: 40px; }
-  .empty-state p { font-size: 14px; }
-
-  @media (max-width: 900px) {
-    .sidebar { width: 240px; }
-    .analysis-panel { width: 240px; }
-  }
-  @media (max-width: 650px) {
-    .sidebar { display: none; }
-    .analysis-panel { display: none; }
-  }
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+  :root{--bg:#0d0f12;--surface:#161a1f;--surface2:#1e2329;--border:#2a2f38;--text:#e8ecf0;--muted:#6b7a8d;--accent:#25d366;--accent2:#128c7e;--warn:#f59e0b;--danger:#ef4444;--info:#3b82f6;--highlight:rgba(37,211,102,0.12)}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column}
+  .topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+  .topbar-brand{display:flex;align-items:center;gap:10px}
+  .topbar-logo{width:28px;height:28px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
+  .topbar-title{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;letter-spacing:-.3px}
+  .topbar-title span{color:var(--accent)}
+  .topbar-meta{display:flex;gap:12px;align-items:center}
+  .pill{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:4px 14px;font-size:12px;color:var(--muted);font-weight:500}
+  .app-layout{display:flex;flex:1;overflow:hidden}
+  .conv-list{width:300px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+  .conv-list-header{padding:14px 16px 10px;border-bottom:1px solid var(--border);flex-shrink:0}
+  .conv-list-header h3{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:10px}
+  .search-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;display:flex;align-items:center;gap:8px}
+  .search-box input{background:transparent;border:none;outline:none;color:var(--text);font-size:12px;width:100%;font-family:'DM Sans',sans-serif}
+  .search-box input::placeholder{color:var(--muted)}
+  .conv-items{flex:1;overflow-y:auto;padding:8px 0}
+  .conv-item{padding:12px 16px;cursor:pointer;border-left:3px solid transparent;transition:all .15s}
+  .conv-item:hover{background:var(--surface2)}
+  .conv-item.active{background:var(--highlight);border-left-color:var(--accent)}
+  .conv-item-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px}
+  .conv-name{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:175px}
+  .conv-time{font-size:11px;color:var(--muted);flex-shrink:0}
+  .conv-preview{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:8px}
+  .conv-footer{display:flex;justify-content:space-between;align-items:center}
+  .score-badge{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px}
+  .score-good{background:rgba(37,211,102,.15);color:var(--accent)}
+  .score-mid{background:rgba(245,158,11,.15);color:var(--warn)}
+  .score-low{background:rgba(239,68,68,.12);color:var(--danger)}
+  .tag-chips{display:flex;gap:4px}
+  .tag-chip{font-size:10px;padding:2px 6px;border-radius:4px;background:var(--surface);border:1px solid var(--border);color:var(--muted);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .conv-main{flex:1;display:flex;flex-direction:column;overflow:hidden;border-right:1px solid var(--border)}
+  .conv-header{padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+  .conv-header-left{display:flex;align-items:center;gap:12px}
+  .contact-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff}
+  .contact-info h4{font-size:14px;font-weight:600}
+  .contact-info p{font-size:11px;color:var(--muted)}
+  .status-pill{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+  .sp-Fechado{background:rgba(37,211,102,.15);color:var(--accent)}
+  .sp-Emandamento{background:rgba(59,130,246,.15);color:var(--info)}
+  .sp-Travado{background:rgba(245,158,11,.15);color:var(--warn)}
+  .sp-Perdido{background:rgba(239,68,68,.12);color:var(--danger)}
+  .messages-area{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:10px}
+  .day-sep{display:flex;align-items:center;gap:10px;margin:4px 0 8px}
+  .day-sep-line{flex:1;height:1px;background:var(--border)}
+  .day-sep-label{font-size:11px;color:var(--muted);background:var(--surface2);padding:2px 10px;border-radius:10px;border:1px solid var(--border)}
+  .msg-row{display:flex;gap:8px;max-width:78%}
+  .msg-row.sent{align-self:flex-end;flex-direction:row-reverse}
+  .msg-row.received{align-self:flex-start}
+  .msg-meta{font-size:10px;color:var(--muted);margin-bottom:3px;padding:0 4px}
+  .msg-row.sent .msg-meta{text-align:right}
+  .msg-bubble{padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.5;white-space:pre-wrap;word-break:break-word}
+  .msg-row.sent .msg-bubble{background:#1d4a2e;border-bottom-right-radius:3px}
+  .msg-row.received .msg-bubble{background:var(--surface2);border:1px solid var(--border);border-bottom-left-radius:3px}
+  .followup-area{border-top:1px solid var(--border);padding:12px 20px;background:var(--surface);flex-shrink:0}
+  .followup-label{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
+  .followup-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12px;line-height:1.55;color:var(--text);display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+  .followup-box span{flex:1}
+  .copy-btn{font-size:10px;padding:3px 8px;border-radius:4px;background:rgba(37,211,102,.15);color:var(--accent);border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;white-space:nowrap;flex-shrink:0}
+  .synthesis-panel{width:290px;flex-shrink:0;background:var(--surface);display:flex;flex-direction:column;overflow:hidden}
+  .synth-header{padding:14px 16px 12px;border-bottom:1px solid var(--border);flex-shrink:0}
+  .synth-header h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:12px}
+  .score-display{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+  .score-num{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;line-height:1}
+  .score-info{flex:1}
+  .score-label{font-size:12px;font-weight:600;margin-bottom:4px}
+  .score-bar-bg{height:5px;background:var(--border);border-radius:3px}
+  .score-bar-fill{height:5px;border-radius:3px}
+  .synth-body{flex:1;overflow-y:auto;padding:0 16px 16px}
+  .synth-section{margin-bottom:16px}
+  .synth-section h5{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px}
+  .summary-text{font-size:12px;color:#b0bac6;line-height:1.6}
+  .metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .metric-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px}
+  .metric-label{font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:3px}
+  .metric-value{font-size:14px;font-weight:700;font-family:'Syne',sans-serif}
+  .improve-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px;cursor:pointer}
+  .improve-item.good{border-left:3px solid var(--accent)}
+  .improve-item.warn{border-left:3px solid var(--warn)}
+  .improve-item.bad{border-left:3px solid var(--danger)}
+  .improve-title{font-size:12px;font-weight:600;margin-bottom:4px}
+  .improve-text{font-size:11px;color:var(--muted);margin-bottom:5px;line-height:1.4}
+  .improve-tip{font-size:11px;color:#b0bac6;background:rgba(255,255,255,.03);border-radius:4px;padding:5px 8px;border:1px solid var(--border);line-height:1.4}
+  .il-good{color:var(--accent)}
+  .il-warn{color:var(--warn)}
+  .il-bad{color:var(--danger)}
+  .obj-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px}
+  .obj-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:2px 6px;border-radius:4px;flex-shrink:0;margin-top:1px}
+  .obj-label.dada{background:rgba(239,68,68,.15);color:var(--danger)}
+  .obj-label.ideal{background:rgba(37,211,102,.15);color:var(--accent)}
+  .placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:12px;color:var(--muted)}
+  .placeholder-icon{font-size:40px;opacity:.3}
+  .placeholder-text{font-size:13px}
 </style>
 </head>
 <body>
-
-<!-- TOPBAR -->
 <div class="topbar">
-  <div class="topbar-logo">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#166534"/><path d="M8 16c1-3 3-5 5-6M12 10c0-2 1-4 3-4" stroke="#4ade80" stroke-width="2" stroke-linecap="round"/></svg>
-    <span><span class="green">Sales</span>Coach AI</span> <span style="color:var(--muted);font-weight:400">— Germinare</span>
+  <div class="topbar-brand">
+    <div class="topbar-logo">🌱</div>
+    <div class="topbar-title">SalesCoach <span>AI</span> — Germinare</div>
   </div>
   <div class="topbar-meta">
     <span class="pill">📅 2026-05-13</span>
-    <span class="pill pill-green" id="neg-count">+ 1 negociações de 9 conversas</span>
+    <span class="pill">✦ 1 negociações de 9 contatos</span>
   </div>
 </div>
-
-<!-- STATS BAR -->
-<div class="stats-bar">
-  <div class="stat-cell"><div class="stat-n">9</div><div class="stat-l">Conversas</div></div>
-  <div class="stat-cell"><div class="stat-n">9</div><div class="stat-l">Pós F1</div></div>
-  <div class="stat-cell"><div class="stat-n" style="color:var(--green)">1</div><div class="stat-l">Negociações</div></div>
-  <div class="stat-cell"><div class="stat-n" style="color:var(--amber)">3.5</div><div class="stat-l">Score médio</div></div>
-</div>
-
-<!-- MAIN LAYOUT -->
-<div class="layout">
-
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <div class="sidebar-header">
-      <div class="sidebar-title">Negociações do dia</div>
+<div class="app-layout">
+  <div class="conv-list">
+    <div class="conv-list-header">
+      <h3>Negociações do Dia</h3>
       <div class="search-box">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input type="text" placeholder="Buscar..." id="search-input" oninput="filterConvs(this.value)">
+        <span style="color:var(--muted);font-size:13px">🔍</span>
+        <input type="text" placeholder="Buscar conversa..." id="searchInput" oninput="filterList()">
       </div>
     </div>
-    <div class="sidebar-list" id="sidebar-list"></div>
+    <div class="conv-items" id="convList"></div>
   </div>
-
-  <!-- CHAT PANEL -->
-  <div class="chat-panel" id="chat-panel">
-    <div class="empty-state" id="empty-state">
-      <div class="big">💬</div>
-      <p>Selecione uma negociação para ver a conversa</p>
-    </div>
-    <div id="chat-content" style="display:none;flex:1;display:none;flex-direction:column;overflow:hidden;">
-      <div class="chat-header" id="chat-header"></div>
-      <div class="chat-messages" id="chat-messages"></div>
-      <div class="followup-bar" id="followup-bar"></div>
+  <div class="conv-main" id="convMain">
+    <div class="placeholder">
+      <div class="placeholder-icon">💬</div>
+      <div class="placeholder-text">Selecione uma negociação</div>
     </div>
   </div>
-
-  <!-- ANALYSIS PANEL -->
-  <div class="analysis-panel" id="analysis-panel">
-    <div style="padding:20px;color:var(--muted);font-size:13px;text-align:center;margin-top:40px">
-      Selecione uma conversa para ver a análise
+  <div class="synthesis-panel" id="synthPanel">
+    <div class="synth-header">
+      <h3>Análise IA</h3>
+      <div style="font-size:12px;color:var(--muted)">— <span id="synthName">Selecione</span></div>
+    </div>
+    <div class="synth-body" id="synthBody">
+      <div style="padding:20px 0;text-align:center;color:var(--muted);font-size:12px">Selecione uma conversa para ver a análise</div>
     </div>
   </div>
-
 </div>
-
 <script>
-const CONVS = [{"chat": "Fabricio", "score": 3.5, "scoreLabel": "Baixo foco comercial", "summary": "O vendedor ignorou a oportunidade de fechamento imediato de 90 toneladas para discutir processos burocráticos. A negociação de preço ficou pendente e sem resposta objetiva.", "status": "Travado", "vendedor": "Fabricio", "produto": "DDGS", "metrics": {"respostaMed": "115min", "objecoes": "1", "conversao": "Não", "msgs": "9"}, "improvements": [{"type": "bad", "label": "🚨 Melhora Urgente", "title": "Ignorou o Fechamento", "text": "Fabricio mudou de assunto sem responder sobre o BID de R$ 1.180 ou a possibilidade de fechar a R$ 1.200.", "tip": "Responda sempre o status da carga atual (fechamento) antes de trazer novas demandas de prospecção.", "msgRef": "Levamos o 1200?"}, {"type": "warn", "label": "⚠️ Atenção", "title": "Tempo de Reação", "text": "Demorou quase duas horas para responder a uma mensagem decisiva de fechamento.", "tip": "No mercado de brokers, a velocidade entre o BID e a resposta define a margem e o fechamento.", "msgRef": "[11:41] Vanessa... [13:36] Fabricio"}], "objecoes": [{"objecao": "Restrição operacional para revenda de DDGS ensacado por cooperativa.", "resposta_dada": "Aceitação passiva ('blz' e 'sim').", "resposta_ideal": "Propor solução alternativa, como faturamento direto aos cooperados ou industrialização por encomenda."}], "followupMsg": "Vanessa, sobre as 90t: o cliente não aceita os R$ 1.200? Vou tentar apertar o fornecedor nos R$ 1.180 agora. Sobre a cooperativa de Maceió, já estou falando com o Lelé para ver se conseguimos faturar via 'ordem de entrega' para os cooperados e resolver o bloqueio da revenda.", "mensagens": [{"hora": "11:40", "de": "Vanessa", "from_me": true, "texto": "Leandro precisava chegar esse aqui a R$1.180 hein , fechar 90 ton", "tipo": "text", "audio_url": null}, {"hora": "11:41", "de": "Vanessa", "from_me": true, "texto": "Levamos o 1200?", "tipo": "text", "audio_url": null}, {"hora": "11:41", "de": "Vanessa", "from_me": true, "texto": "Bom dia", "tipo": "text", "audio_url": null}, {"hora": "11:44", "de": "Fabricio", "from_me": false, "texto": null, "tipo": "unknown", "audio_url": null}, {"hora": "13:36", "de": "Fabricio", "from_me": false, "texto": "Senhora preciso saber como fica o processo de revenda do ddgs , eu capitei uma cooperativa em Maceió eles querem comprar tanto para consumo próprio deles na produçao de raçao deles porém eles querem ensacar esse produto para revender para os cooperados", "tipo": "text", "audio_url": null}, {"hora": "13:44", "de": "Vanessa", "from_me": true, "texto": "a priori estava barrado", "tipo": "text", "audio_url": null}, {"hora": "13:44", "de": "Vanessa", "from_me": true, "texto": "flaa com o lele", "tipo": "text", "audio_url": null}, {"hora": "13:49", "de": "Fabricio", "from_me": false, "texto": "blz", "tipo": "text", "audio_url": null}, {"hora": "14:17", "de": "Vanessa", "from_me": true, "texto": "me avisa dps", "tipo": "text", "audio_url": null}, {"hora": "14:17", "de": "Vanessa", "from_me": true, "texto": "como que ficou", "tipo": "text", "audio_url": null}, {"hora": "14:22", "de": "Fabricio", "from_me": false, "texto": "si", "tipo": "text", "audio_url": null}, {"hora": "14:22", "de": "Fabricio", "from_me": false, "texto": "sim", "tipo": "text", "audio_url": null}]}];
-
-function scoreColor(s) {
-  if (s >= 8) return '#22c55e';
-  if (s >= 6) return '#f59e0b';
-  return '#ef4444';
-}
-
-function statusClass(st) {
-  return 'status-' + (st || '').replace(' ', '.');
-}
-
-function escHtml(s) {
-  if (!s) return '';
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-// Build sidebar
-function buildSidebar(list) {
-  const el = document.getElementById('sidebar-list');
-  el.innerHTML = list.map((c, i) => {
-    const sc = scoreColor(c.score);
-    const lastMsg = c.mensagens.length ? c.mensagens[c.mensagens.length-1] : null;
-    const preview = lastMsg ? escHtml(lastMsg.texto || '[' + (lastMsg.tipo||'') + ']') : '';
-    const lastTime = lastMsg ? lastMsg.hora : '';
-    const statusCls = 'status-' + c.status;
-    return `<div class="conv-item" id="ci-${i}" onclick="selectConv(${i})">
-      <div class="conv-top">
-        <span class="conv-name">${escHtml(c.chat)}</span>
-        <span class="conv-time">${lastTime}</span>
-      </div>
-      <div class="conv-preview">${preview}</div>
-      <div class="conv-tags">
-        <span class="score-star">★ ${c.score}</span>
-        <span class="tag">${escHtml(c.produto)}</span>
-        <span class="status-tag ${statusCls}">${escHtml(c.status)}</span>
-      </div>
-    </div>`;
+var CONVS=[{"id": 0, "chat": "Fabricio", "score": 3.5, "status": "Travado", "scoreLabel": "Baixo foco comercial", "summary": "O vendedor ignorou a oportunidade de fechamento imediato de 90 toneladas para discutir processos burocráticos. A negociação de preço ficou pendente e sem resposta objetiva.", "vendedor": "Fabricio", "produto": "DDGS", "metrics": {"respostaMed": "115min", "objecoes": "1", "conversao": "Não", "msgs": "9"}, "improvements": [{"type": "bad", "label": "🚨 Melhora Urgente", "title": "Ignorou o Fechamento", "text": "Fabricio mudou de assunto sem responder sobre o BID de R$ 1.180 ou a possibilidade de fechar a R$ 1.200.", "tip": "Responda sempre o status da carga atual (fechamento) antes de trazer novas demandas de prospecção.", "msgRef": "Levamos o 1200?"}, {"type": "warn", "label": "⚠️ Atenção", "title": "Tempo de Reação", "text": "Demorou quase duas horas para responder a uma mensagem decisiva de fechamento.", "tip": "No mercado de brokers, a velocidade entre o BID e a resposta do fornecedor define a margem e o fechamento.", "msgRef": "[11:41] Vanessa... [13:36] Fabricio"}], "objecoes": [{"objecao": "Restrição operacional para revenda de DDGS ensacado por cooperativa.", "resposta_dada": "Aceitação passiva ('blz' e 'sim').", "resposta_ideal": "Propor solução alternativa, como faturamento direto aos cooperados ou industrialização por encomenda."}], "followupMsg": "Vanessa, sobre as 90t: o cliente não aceita os R$ 1.200? Vou tentar apertar o fornecedor nos R$ 1.180 agora. Sobre a cooperativa de Maceió, já estou falando com o Lelé para ver se conseguimos faturar via 'ordem de entrega' para os cooperados e resolver o bloqueio da revenda.", "initials": "FA", "avatarGrad": "linear-gradient(135deg,#3b3b6b,#5b5baa)", "time": "14:22", "preview": "blz", "msgs": 9, "tags": ["DDGS", "Travado"], "messages": [{"from_me": true, "sender": "Vanessa", "time": "11:40", "text": "Leandro precisava chegar esse aqui a R$1.180 hein , fechar 90 ton"}, {"from_me": true, "sender": "Vanessa", "time": "11:41", "text": "Levamos o 1200?"}, {"from_me": true, "sender": "Vanessa", "time": "11:41", "text": "Bom dia"}, {"from_me": false, "sender": "Fabricio", "time": "11:44", "text": "[unknown]"}, {"from_me": false, "sender": "Fabricio", "time": "13:36", "text": "Senhora preciso saber como fica o processo de revenda do ddgs , eu capitei uma cooperativa em Maceió eles querem comprar tanto para consumo próprio deles na produçao de raçao deles porém eles querem ensacar esse produto para revender para os cooperados"}, {"from_me": true, "sender": "Vanessa", "time": "13:44", "text": "a priori estava barrado"}, {"from_me": true, "sender": "Vanessa", "time": "13:44", "text": "flaa com o lele"}, {"from_me": false, "sender": "Fabricio", "time": "13:49", "text": "blz"}, {"from_me": true, "sender": "Vanessa", "time": "14:17", "text": "me avisa dps"}, {"from_me": true, "sender": "Vanessa", "time": "14:17", "text": "como que ficou"}, {"from_me": false, "sender": "Fabricio", "time": "14:22", "text": "si"}, {"from_me": false, "sender": "Fabricio", "time": "14:22", "text": "sim"}]}];
+function esc(s){if(!s)return '';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function scoreColor(s){return s>=8?'var(--accent)':s>=6?'var(--warn)':'var(--danger)'}
+function scoreClass(s){return s>=8?'score-good':s>=6?'score-mid':'score-low'}
+function renderList(filter){
+  filter=(filter||'').toLowerCase();
+  var el=document.getElementById('convList');
+  el.innerHTML=CONVS.filter(function(c){return !filter||c.chat.toLowerCase().includes(filter)}).map(function(c){
+    var sc=scoreClass(c.score);
+    return '<div class="conv-item" id="ci-'+c.id+'" onclick="openConv('+c.id+')">'
+      +'<div class="conv-item-top"><span class="conv-name">'+esc(c.chat)+'</span><span class="conv-time">'+c.time+'</span></div>'
+      +'<div class="conv-preview">'+esc(c.preview)+'</div>'
+      +'<div class="conv-footer"><span class="score-badge '+sc+'">◆ '+c.score+'</span>'
+      +'<div class="tag-chips">'+c.tags.filter(Boolean).map(function(t){return '<span class="tag-chip">'+esc(t)+'</span>'}).join('')+'</div></div>'
+      +'</div>';
   }).join('');
 }
-
-function filterConvs(q) {
-  const qq = q.toLowerCase();
-  CONVS.forEach((c, i) => {
-    const el = document.getElementById('ci-' + i);
-    if (el) el.style.display = (!qq || c.chat.toLowerCase().includes(qq) || c.produto.toLowerCase().includes(qq)) ? '' : 'none';
+function filterList(){renderList(document.getElementById('searchInput').value)}
+function openConv(id){
+  document.querySelectorAll('.conv-item').forEach(function(e){e.classList.remove('active')});
+  var el=document.getElementById('ci-'+id);
+  if(el) el.classList.add('active');
+  var c=CONVS.find(function(x){return x.id===id});
+  if(!c) return;
+  var color=scoreColor(c.score);
+  var spClass='sp-'+c.status.replace(/ /g,'');
+  var main=document.getElementById('convMain');
+  main.innerHTML='<div class="conv-header"><div class="conv-header-left">'
+    +'<div class="contact-avatar" style="background:'+esc(c.avatarGrad)+'">'+esc(c.initials)+'</div>'
+    +'<div class="contact-info"><h4>'+esc(c.chat)+'</h4><p>'+esc(c.vendedor)+' · '+c.msgs+' msgs</p></div></div>'
+    +'<span class="status-pill '+spClass+'">'+esc(c.status)+'</span></div>'
+    +'<div class="messages-area" id="msgsArea">'
+    +'<div class="day-sep"><div class="day-sep-line"></div><div class="day-sep-label">2026-05-13</div><div class="day-sep-line"></div></div>'
+    +(c.messages&&c.messages.length?c.messages.map(function(m){
+      var cls=m.from_me?'sent':'received';
+      return '<div class="msg-row '+cls+'">'
+        +'<div><div class="msg-meta">'+esc(m.sender)+' · '+esc(m.time)+'</div>'
+        +'<div class="msg-bubble">'+esc(m.text)+'</div></div></div>';
+    }).join(''):'<div style="text-align:center;color:var(--muted);font-size:12px;padding:20px">Mensagens não disponíveis</div>')
+    +'</div>'
+    +'<div class="followup-area"><div class="followup-label">💬 Follow-up sugerido pela IA</div>'
+    +'<div class="followup-box"><span id="followupText">'+esc(c.followupMsg)+'</span>'
+    +'<button class="copy-btn" onclick="copyFollowup()">Copiar</button></div></div>';
+  var msgsEl=document.getElementById('msgsArea');
+  if(msgsEl) msgsEl.scrollTop=msgsEl.scrollHeight;
+  renderSynth(c);
+}
+function renderSynth(c){
+  document.getElementById('synthName').textContent=c.chat;
+  var color=scoreColor(c.score);
+  var pct=Math.round(c.score*10);
+  var sb=document.getElementById('synthBody');
+  sb.innerHTML='<div class="synth-section">'
+    +'<div class="score-display">'
+    +'<div class="score-num" style="color:'+color+'">'+c.score+'</div>'
+    +'<div class="score-info"><div class="score-label" style="color:'+color+'">'+esc(c.scoreLabel)+'</div>'
+    +'<div class="score-bar-bg"><div class="score-bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div></div></div>'
+    +'<div class="summary-text">'+esc(c.summary)+'</div></div>'
+    +'<div class="synth-section"><h5>📊 Métricas</h5><div class="metrics-grid">'
+    +'<div class="metric-card"><div class="metric-label">Resposta Méd.</div><div class="metric-value">'+esc(c.metrics.respostaMed||'--')+'</div></div>'
+    +'<div class="metric-card"><div class="metric-label">Msgs</div><div class="metric-value">'+esc(c.metrics.msgs||c.msgs)+'</div></div>'
+    +'<div class="metric-card"><div class="metric-label">Objeções</div><div class="metric-value">'+esc(c.metrics.objecoes||'0')+'</div></div>'
+    +'<div class="metric-card"><div class="metric-label">Conversão</div><div class="metric-value">'+esc(c.metrics.conversao||'--')+'</div></div>'
+    +'</div></div>'
+    +'<div class="synth-section"><h5>🎯 Análise</h5>'
+    +c.improvements.map(function(imp){
+      return '<div class="improve-item '+imp.type+'">'
+        +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">'
+        +'<span style="font-size:11px;font-weight:700" class="il-'+imp.type+'">'+esc(imp.label)+'</span></div>'
+        +'<div class="improve-title">'+esc(imp.title)+'</div>'
+        +'<div class="improve-text">'+esc(imp.text)+'</div>'
+        +'<div class="improve-tip">💡 '+esc(imp.tip)+'</div>'
+        +'</div>';
+    }).join('')+'</div>'
+    +(c.objecoes&&c.objecoes.length?
+      '<div class="synth-section"><h5>🛡 Objeções</h5>'
+      +c.objecoes.map(function(o){
+        return '<div class="obj-card">'
+          +'<div style="font-size:12px;font-weight:600;margin-bottom:6px">'+esc(o.objecao)+'</div>'
+          +(o.resposta_dada?'<div style="display:flex;gap:6px;margin-bottom:4px;align-items:flex-start"><span class="obj-label dada">Como reagiu</span><span style="font-size:11px;color:#b0bac6;line-height:1.4;flex:1">'+esc(o.resposta_dada)+'</span></div>':'')
+          +(o.resposta_ideal?'<div style="display:flex;gap:6px;align-items:flex-start"><span class="obj-label ideal">Ideal</span><span style="font-size:11px;color:#b0bac6;line-height:1.4;flex:1">'+esc(o.resposta_ideal)+'</span></div>':'')
+          +'</div>';
+      }).join('')+'</div>'
+    :'');
+}
+function copyFollowup(){
+  var text=document.getElementById('followupText').textContent;
+  navigator.clipboard.writeText(text).then(function(){
+    var btn=document.querySelector('.copy-btn');
+    if(btn){btn.textContent='✓ Copiado';setTimeout(function(){btn.textContent='Copiar'},2000)}
   });
 }
-
-let currentConv = null;
-
-function selectConv(i) {
-  currentConv = i;
-  const c = CONVS[i];
-
-  // Highlight sidebar
-  document.querySelectorAll('.conv-item').forEach(el => el.classList.remove('active'));
-  const ci = document.getElementById('ci-' + i);
-  if (ci) ci.classList.add('active');
-
-  // Show chat content
-  document.getElementById('empty-state').style.display = 'none';
-  const cc = document.getElementById('chat-content');
-  cc.style.display = 'flex';
-  cc.style.flexDirection = 'column';
-  cc.style.overflow = 'hidden';
-  cc.style.flex = '1';
-
-  // Header
-  const initials = c.chat.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  document.getElementById('chat-header').innerHTML = `
-    <div class="chat-avatar">${initials}</div>
-    <div class="chat-header-info">
-      <div class="chat-header-name">${escHtml(c.chat)}</div>
-      <div class="chat-header-sub">${c.metrics.msgs} mensagens · ${escHtml(c.vendedor)}</div>
-    </div>
-    <span class="status-tag status-${escHtml(c.status)}">${escHtml(c.status)}</span>
-  `;
-
-  // Messages
-  const msgsEl = document.getElementById('chat-messages');
-  let html = `<div class="date-sep"><span>${c.chat} · ` + data_ref + `</span></div>`;
-  c.mensagens.forEach(m => {
-    const side = m.from_me ? 'sent' : 'recv';
-    const sender = escHtml(m.de || (m.from_me ? 'Vanessa' : c.chat));
-    const txt = escHtml(m.texto || '[' + (m.tipo||'') + ']');
-    html += `<div class="msg-row ${side}">
-      <div class="bubble">
-        <div class="bubble-sender">${sender}</div>
-        <div class="bubble-text">${txt}</div>
-        <div class="bubble-time">${m.hora || ''}</div>
-      </div>
-    </div>`;
-  });
-  msgsEl.innerHTML = html;
-  msgsEl.scrollTop = msgsEl.scrollHeight;
-
-  // Follow-up
-  document.getElementById('followup-bar').innerHTML = `
-    <div class="followup-label">Follow-up Sugerido pela IA</div>
-    <div class="followup-content">
-      <div class="followup-text" id="fup-text-${i}">${escHtml(c.followupMsg)}</div>
-      <button class="copy-btn" onclick="copyFollowup(${i})">Copiar</button>
-    </div>
-  `;
-
-  // Analysis panel
-  const sc = c.score;
-  const scColor = scoreColor(sc);
-  const radius = 26;
-  const circ = 2 * Math.PI * radius;
-  const dash = (sc / 10) * circ;
-
-  let improvHtml = '';
-  c.improvements.forEach((imp, ii) => {
-    improvHtml += `<div class="improvement-item" id="imp-${i}-${ii}" onclick="toggleImp(${i},${ii})">
-      <div class="imp-header">
-        <span class="imp-badge ${imp.type}">${escHtml(imp.label)}</span>
-      </div>
-      <div class="imp-title">${escHtml(imp.title)}</div>
-      <div class="imp-text">${escHtml(imp.text)}</div>
-      <div class="imp-detail">
-        <div class="imp-tip">💡 ${escHtml(imp.tip)}</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:6px">Ref: "${escHtml(imp.msgRef)}"</div>
-      </div>
-    </div>`;
-  });
-
-  let objHtml = '';
-  (c.objecoes || []).forEach(o => {
-    objHtml += `<div class="obj-item">
-      <div class="obj-q">${escHtml(o.objecao)}</div>
-      <div class="obj-row"><span class="label">Reagiu: </span><span class="bad">${escHtml(o.resposta_dada)}</span></div>
-      <div class="obj-row"><span class="label">Ideal: </span><span class="good">${escHtml(o.resposta_ideal)}</span></div>
-    </div>`;
-  });
-
-  const metricColor = (key, val) => {
-    if (key === 'conversao') return val === 'Sim' ? 'green' : val === 'Parcial' ? 'amber' : 'red';
-    if (key === 'respostaMed') return 'amber';
-    if (key === 'objecoes') return parseInt(val) > 2 ? 'red' : 'amber';
-    return 'blue';
-  };
-
-  document.getElementById('analysis-panel').innerHTML = `
-    <div class="ap-section">
-      <div class="ap-label">📊 Análise IA</div>
-      <div class="score-ring-wrap">
-        <div class="score-ring">
-          <svg width="64" height="64" viewBox="0 0 64 64">
-            <circle cx="32" cy="32" r="${radius}" fill="none" stroke="var(--surface2)" stroke-width="6"/>
-            <circle cx="32" cy="32" r="${radius}" fill="none" stroke="${scColor}" stroke-width="6"
-              stroke-dasharray="${dash.toFixed(2)} ${circ.toFixed(2)}" stroke-linecap="round"/>
-          </svg>
-          <div class="score-ring-val" style="color:${scColor}">${sc}</div>
-        </div>
-        <div>
-          <div class="score-info-label" style="color:${scColor}">${escHtml(c.scoreLabel)}</div>
-          <div class="score-info-sub">${escHtml(c.status)} · ${c.metrics.msgs} msgs</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="ap-section">
-      <div class="ap-label">📝 Síntese</div>
-      <div class="sintese-text">${escHtml(c.summary)}</div>
-    </div>
-
-    <div class="ap-section">
-      <div class="ap-label">📈 Métricas</div>
-      <div class="metrics-grid">
-        <div class="metric-cell">
-          <div class="metric-val ${metricColor('respostaMed', c.metrics.respostaMed)}">${escHtml(c.metrics.respostaMed)}</div>
-          <div class="metric-lbl">Resp. Média</div>
-        </div>
-        <div class="metric-cell">
-          <div class="metric-val ${metricColor('objecoes', c.metrics.objecoes)}">${escHtml(c.metrics.objecoes)}</div>
-          <div class="metric-lbl">Objeções</div>
-        </div>
-        <div class="metric-cell">
-          <div class="metric-val blue">${escHtml(c.metrics.msgs)}</div>
-          <div class="metric-lbl">Mensagens</div>
-        </div>
-        <div class="metric-cell">
-          <div class="metric-val ${metricColor('conversao', c.metrics.conversao)}">${escHtml(c.metrics.conversao)}</div>
-          <div class="metric-lbl">Conversão</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="ap-section">
-      <div class="ap-label">💡 Análise</div>
-      ${improvHtml}
-    </div>
-
-    ${objHtml ? `<div class="ap-section"><div class="ap-label">🧱 Objeções</div>${objHtml}</div>` : ''}
-  `;
-}
-
-function toggleImp(ci, ii) {
-  const el = document.getElementById(`imp-${ci}-${ii}`);
-  if (el) el.classList.toggle('open');
-}
-
-function copyFollowup(i) {
-  const el = document.getElementById(`fup-text-${i}`);
-  if (!el) return;
-  navigator.clipboard.writeText(el.innerText).then(() => {
-    const btn = el.nextElementSibling;
-    if (btn) { btn.textContent = 'Copiado!'; setTimeout(() => btn.textContent = 'Copiar', 1500); }
-  });
-}
-
-// Init
-buildSidebar(CONVS);
-if (CONVS.length > 0) selectConv(0);
+renderList();
+if(CONVS.length>0) openConv(0);
 </script>
 </body>
 </html>
