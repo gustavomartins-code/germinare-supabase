@@ -90,16 +90,12 @@
   .improve-title{font-size:12px;font-weight:600;margin-bottom:4px}
   .improve-text{font-size:11px;color:var(--muted);margin-bottom:5px;line-height:1.4}
   .improve-tip{font-size:11px;color:#b0bac6;background:rgba(255,255,255,.03);border-radius:4px;padding:5px 8px;border:1px solid var(--border);line-height:1.4}
-  .il-good{color:var(--accent)}
-  .il-warn{color:var(--warn)}
-  .il-bad{color:var(--danger)}
+  .il-good{color:var(--accent)} .il-warn{color:var(--warn)} .il-bad{color:var(--danger)}
   .obj-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px}
   .obj-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:2px 6px;border-radius:4px;flex-shrink:0;margin-top:1px}
   .obj-label.dada{background:rgba(239,68,68,.15);color:var(--danger)}
   .obj-label.ideal{background:rgba(37,211,102,.15);color:var(--accent)}
   .placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:12px;color:var(--muted)}
-  .placeholder-icon{font-size:40px;opacity:.3}
-  .placeholder-text{font-size:13px}
 </style>
 </head>
 <body>
@@ -110,7 +106,7 @@
   </div>
   <div class="topbar-meta">
     <span class="pill">📅 2026-05-13</span>
-    <span class="pill">✶ 1 negociação de 9 contatos</span>
+    <span class="pill">✶ 1 negociação · 10 contatos</span>
   </div>
 </div>
 <div class="app-layout">
@@ -119,122 +115,104 @@
       <h3>Negociações do Dia</h3>
       <div class="search-box">
         <span style="color:var(--muted);font-size:13px">🔍</span>
-        <input type="text" placeholder="Buscar conversa..." id="searchInput" oninput="filterList()">
+        <input type="text" placeholder="Buscar..." id="searchInput" oninput="filterList()">
       </div>
     </div>
     <div class="conv-items" id="convList"></div>
   </div>
   <div class="conv-main" id="convMain">
-    <div class="placeholder">
-      <div class="placeholder-icon">💬</div>
-      <div class="placeholder-text">Selecione uma negociação</div>
-    </div>
+    <div class="placeholder"><div style="font-size:40px;opacity:.3">💬</div><div style="font-size:13px">Selecione uma negociação</div></div>
   </div>
-  <div class="synthesis-panel" id="synthPanel">
+  <div class="synthesis-panel">
     <div class="synth-header">
       <h3>Análise IA</h3>
       <div style="font-size:12px;color:var(--muted)">— <span id="synthName">Selecione</span></div>
     </div>
     <div class="synth-body" id="synthBody">
-      <div style="padding:20px 0;text-align:center;color:var(--muted);font-size:12px">Selecione uma conversa para ver a análise</div>
+      <div style="padding:20px 0;text-align:center;color:var(--muted);font-size:12px">Selecione uma conversa</div>
     </div>
   </div>
 </div>
 <script>
-var CONVS=[{"id": 0, "chat": "Fabricio", "score": 4.5, "status": "Travado", "scoreLabel": "Baixa resolutividade e perda de ritmo", "summary": "A vendedora iniciou uma tentativa de fechamento de 90t, mas perdeu o controle da negociação ao delegar a resolução de um entrave burocrático ao próprio parceiro. A falta de proatividade em resolver a dúvida do fornecedor travou o fluxo da venda principal.", "vendedor": "Vanessa", "produto": "DDGS", "metrics": {"respostaMed": "58min", "objecoes": "1", "conversao": "Não", "msgs": "10"}, "improvements": [{"type": "bad", "label": "🚨 Melhora Urgente", "title": "Terceirização da Solução", "text": "Ao dizer 'fala com o lele', a vendedora transfere a responsabilidade de resolver um problema para o parceiro, perdendo a posição de facilitadora.", "tip": "Como broker, você deve ser o ponto de convergência. Busque a resposta internamente e retorne com a solução pronta para o fornecedor.", "msgRef": "flaa com o lele"}, {"type": "warn", "label": "⚠️ Atenção", "title": "Perda do Gancho de Venda", "text": "A proposta de fechamento das 90 toneladas foi abandonada no momento em que surgiu o questionamento sobre a revenda.", "tip": "Sempre ancore a resolução de uma dúvida técnica ao fechamento do pedido pendente: 'Vou resolver isso agora com o Lele e já confirmamos as 90t'.", "msgRef": "Levamos o 1200?"}], "objecoes": [{"objecao": "Restrição de processo para ensaque e revenda de DDGS para cooperados.", "resposta_dada": "Informou que estava 'barrado' e delegou o contato para terceiros.", "resposta_ideal": "Entendo a necessidade da cooperativa. Vou verificar agora com o jurídico/comercial se abrimos exceção para esse volume e te aviso em 10 minutos para fecharmos as 90t também."}], "followupMsg": "Fabricio, já agilizei aqui internamente sobre a questão da revenda para a cooperativa e tenho um caminho. Vamos fechar as 90t no R$ 1.200 agora para eu já garantir esse lote enquanto finalizamos o processo de Maceió?", "initials": "FA", "avatarGrad": "linear-gradient(135deg,#3b3b6b,#5b5baa)", "time": "11:17", "preview": "como que ficou", "msgs": 10, "tags": ["DDGS", "Travado"], "messages": [{"from_me": true, "sender": "Vanessa", "time": "08:40", "text": "Leandro precisava chegar esse aqui a R$1.180 hein , fechar 90 ton"}, {"from_me": true, "sender": "Vanessa", "time": "08:41", "text": "Levamos o 1200?"}, {"from_me": true, "sender": "Vanessa", "time": "08:41", "text": "Bom dia"}, {"from_me": false, "sender": "Fabricio", "time": "08:44", "text": "[unknown]"}, {"from_me": false, "sender": "Fabricio", "time": "10:36", "text": "Senhora preciso saber como fica o processo de revenda do ddgs , eu capitei uma cooperativa em Maceió eles querem comprar tanto para consumo próprio deles na produçao de raçao deles porém eles querem ensacar esse produto para revender para os cooperados"}, {"from_me": true, "sender": "Vanessa", "time": "10:44", "text": "a priori estava barrado"}, {"from_me": true, "sender": "Vanessa", "time": "10:44", "text": "flaa com o lele"}, {"from_me": false, "sender": "Fabricio", "time": "10:49", "text": "blz"}, {"from_me": true, "sender": "Vanessa", "time": "11:17", "text": "me avisa dps"}, {"from_me": true, "sender": "Vanessa", "time": "11:17", "text": "como que ficou"}]}];
-function esc(s){if(!s)return '';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+var CONVS=[{"id": 0, "chat": "Fabricio", "score": 4.0, "status": "Travado", "scoreLabel": "Negociação reativa e estagnada", "summary": "A vendedora tentou forçar o fechamento por preço, mas perdeu o controle da conversa quando o fornecedor trouxe uma dúvida operacional. A negociação das 90 toneladas ficou em segundo plano sem uma resolução clara sobre o impedimento da revenda.", "vendedor": "Vanessa", "produto": "DDGS", "metrics": {"respostaMed": "15min", "objecoes": "1", "conversao": "Não", "msgs": "12"}, "improvements": [{"type": "bad", "label": "🚨 Melhora Urgente", "title": "Delegar sem Direcionamento", "text": "Ao enviar o fornecedor para falar com o 'Lele', a vendedora perde a gestão da oportunidade e o timing do fechamento das 90 toneladas.", "tip": "Assuma a burocracia: 'Deixa que eu verifico com o Leandro agora e te retorno em 5 minutos para não perdermos esse lote'.", "msgRef": "flaa com o lele"}, {"type": "warn", "label": "⚠️ Atenção", "title": "Falta de Follow-up de Fechamento", "text": "A pergunta sobre os R$ 1.200 foi ignorada pelo fornecedor e a vendedora não retomou o gancho comercial.", "tip": "Sempre condicione a ajuda técnica ao fechamento comercial pendente.", "msgRef": "Levamos o 1200?"}], "objecoes": [{"objecao": "Dúvida sobre o processo de revenda de DDGS para cooperativas.", "resposta_dada": "Informou que estava barrado e orientou falar com outra pessoa.", "resposta_ideal": "Vou checar a liberação de revenda agora. Se eu conseguir essa exceção para a cooperativa, fechamos aquelas 90t no preço que você precisa?"}], "followupMsg": "Fabricio, verifiquei aqui a questão da revenda com o Leandro. Tenho um caminho para essa cooperativa de Maceió, mas antes preciso travar aquelas 90t que falamos cedo. Conseguimos fechar nos 1.180 ou confirmamos nos 1.200 agora para garantir o produto?", "initials": "FA", "avatarGrad": "linear-gradient(135deg,#3b3b6b,#5b5baa)", "time": "11:22", "preview": "sim", "msgs": 12, "tags": ["DDGS", "Travado"], "messages": [{"from_me": true, "sender": "Vanessa", "time": "08:40", "text": "Leandro precisava chegar esse aqui a R$1.180 hein , fechar 90 ton"}, {"from_me": true, "sender": "Vanessa", "time": "08:41", "text": "Levamos o 1200?"}, {"from_me": true, "sender": "Vanessa", "time": "08:41", "text": "Bom dia"}, {"from_me": false, "sender": "Fabricio", "time": "08:44", "text": "[unknown]"}, {"from_me": false, "sender": "Fabricio", "time": "10:36", "text": "Senhora preciso saber como fica o processo de revenda do ddgs , eu capitei uma cooperativa em Maceió eles querem comprar tanto para consumo próprio deles na produçao de raçao deles porém eles querem ensacar esse produto para revender para os cooperados"}, {"from_me": true, "sender": "Vanessa", "time": "10:44", "text": "a priori estava barrado"}, {"from_me": true, "sender": "Vanessa", "time": "10:44", "text": "flaa com o lele"}, {"from_me": false, "sender": "Fabricio", "time": "10:49", "text": "blz"}, {"from_me": true, "sender": "Vanessa", "time": "11:17", "text": "me avisa dps"}, {"from_me": true, "sender": "Vanessa", "time": "11:17", "text": "como que ficou"}, {"from_me": false, "sender": "Fabricio", "time": "11:22", "text": "si"}, {"from_me": false, "sender": "Fabricio", "time": "11:22", "text": "sim"}]}];
+function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function scoreColor(s){return s>=8?'var(--accent)':s>=6?'var(--warn)':'var(--danger)'}
 function scoreClass(s){return s>=8?'score-good':s>=6?'score-mid':'score-low'}
-function renderList(filter){
-  filter=(filter||'').toLowerCase();
-  var el=document.getElementById('convList');
-  el.innerHTML=CONVS.filter(function(c){return !filter||c.chat.toLowerCase().includes(filter)}).map(function(c){
-    var sc=scoreClass(c.score);
-    return '<div class="conv-item" id="ci-'+c.id+'" onclick="openConv('+c.id+')">'
-      +'<div class="conv-item-top"><span class="conv-name">'+esc(c.chat)+'</span><span class="conv-time">'+c.time+'</span></div>'
-      +'<div class="conv-preview">'+esc(c.preview)+'</div>'
-      +'<div class="conv-footer"><span class="score-badge '+sc+'">◆ '+c.score+'</span>'
-      +'<div class="tag-chips">'+c.tags.filter(Boolean).map(function(t){return '<span class="tag-chip">'+esc(t)+'</span>'}).join('')+'</div></div>'
-      +'</div>';
-  }).join('');
+function renderList(f){
+  f=(f||'').toLowerCase();
+  document.getElementById('convList').innerHTML=CONVS.filter(c=>!f||c.chat.toLowerCase().includes(f)).map(c=>
+    '<div class="conv-item" id="ci-'+c.id+'" onclick="openConv('+c.id+')">'
+    +'<div class="conv-item-top"><span class="conv-name">'+esc(c.chat)+'</span><span class="conv-time">'+c.time+'</span></div>'
+    +'<div class="conv-preview">'+esc(c.preview)+'</div>'
+    +'<div class="conv-footer"><span class="score-badge '+scoreClass(c.score)+'">◆ '+c.score+'</span>'
+    +'<div class="tag-chips">'+c.tags.map(t=>'<span class="tag-chip">'+esc(t)+'</span>').join('')+'</div></div></div>'
+  ).join('');
 }
 function filterList(){renderList(document.getElementById('searchInput').value)}
 function openConv(id){
-  document.querySelectorAll('.conv-item').forEach(function(e){e.classList.remove('active')});
-  var el=document.getElementById('ci-'+id);
-  if(el) el.classList.add('active');
-  var c=CONVS.find(function(x){return x.id===id});
-  if(!c) return;
-  var color=scoreColor(c.score);
+  document.querySelectorAll('.conv-item').forEach(e=>e.classList.remove('active'));
+  var el=document.getElementById('ci-'+id); if(el)el.classList.add('active');
+  var c=CONVS.find(x=>x.id===id); if(!c)return;
   var spClass='sp-'+c.status.replace(/ /g,'');
-  var main=document.getElementById('convMain');
-  main.innerHTML='<div class="conv-header"><div class="conv-header-left">'
+  document.getElementById('convMain').innerHTML=
+    '<div class="conv-header"><div class="conv-header-left">'
     +'<div class="contact-avatar" style="background:'+esc(c.avatarGrad)+'">'+esc(c.initials)+'</div>'
     +'<div class="contact-info"><h4>'+esc(c.chat)+'</h4><p>'+esc(c.vendedor)+' · '+c.msgs+' msgs</p></div></div>'
     +'<span class="status-pill '+spClass+'">'+esc(c.status)+'</span></div>'
     +'<div class="messages-area" id="msgsArea">'
     +'<div class="day-sep"><div class="day-sep-line"></div><div class="day-sep-label">2026-05-13</div><div class="day-sep-line"></div></div>'
-    +(c.messages&&c.messages.length?c.messages.map(function(m){
+    +(c.messages&&c.messages.length?c.messages.map(m=>{
       var cls=m.from_me?'sent':'received';
-      return '<div class="msg-row '+cls+'">'
-        +'<div><div class="msg-meta">'+esc(m.sender)+' · '+esc(m.time)+'</div>'
+      return '<div class="msg-row '+cls+'"><div><div class="msg-meta">'+esc(m.sender)+' · '+esc(m.time)+'</div>'
         +'<div class="msg-bubble">'+esc(m.text)+'</div></div></div>';
-    }).join(''):'<div style="text-align:center;color:var(--muted);font-size:12px;padding:20px">Mensagens não disponíveis</div>')
+    }).join(''):'<div style="text-align:center;color:var(--muted);font-size:12px;padding:20px">Sem mensagens</div>')
     +'</div>'
     +'<div class="followup-area"><div class="followup-label">💬 Follow-up sugerido pela IA</div>'
     +'<div class="followup-box"><span id="followupText">'+esc(c.followupMsg)+'</span>'
     +'<button class="copy-btn" onclick="copyFollowup()">Copiar</button></div></div>';
-  var msgsEl=document.getElementById('msgsArea');
-  if(msgsEl) msgsEl.scrollTop=msgsEl.scrollHeight;
+  var ma=document.getElementById('msgsArea'); if(ma)ma.scrollTop=ma.scrollHeight;
   renderSynth(c);
 }
 function renderSynth(c){
   document.getElementById('synthName').textContent=c.chat;
-  var color=scoreColor(c.score);
-  var pct=Math.round(c.score*10);
-  var sb=document.getElementById('synthBody');
-  sb.innerHTML='<div class="synth-section">'
-    +'<div class="score-display">'
+  var color=scoreColor(c.score), pct=Math.round(c.score*10);
+  document.getElementById('synthBody').innerHTML=
+    '<div class="synth-section"><div class="score-display">'
     +'<div class="score-num" style="color:'+color+'">'+c.score+'</div>'
     +'<div class="score-info"><div class="score-label" style="color:'+color+'">'+esc(c.scoreLabel)+'</div>'
     +'<div class="score-bar-bg"><div class="score-bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div></div></div>'
     +'<div class="summary-text">'+esc(c.summary)+'</div></div>'
     +'<div class="synth-section"><h5>📊 Métricas</h5><div class="metrics-grid">'
-    +'<div class="metric-card"><div class="metric-label">Resposta Méd.</div><div class="metric-value">'+esc(c.metrics.respostaMed||'--')+'</div></div>'
-    +'<div class="metric-card"><div class="metric-label">Msgs</div><div class="metric-value">'+esc(c.metrics.msgs||c.msgs)+'</div></div>'
-    +'<div class="metric-card"><div class="metric-label">Objeções</div><div class="metric-value">'+esc(c.metrics.objecoes||'0')+'</div></div>'
-    +'<div class="metric-card"><div class="metric-label">Conversão</div><div class="metric-value">'+esc(c.metrics.conversao||'--')+'</div></div>'
+    +'<div class="metric-card"><div class="metric-label">Resp. Média</div><div class="metric-value">'+esc(c.metrics.respostaMed)+'</div></div>'
+    +'<div class="metric-card"><div class="metric-label">Msgs</div><div class="metric-value">'+esc(c.metrics.msgs)+'</div></div>'
+    +'<div class="metric-card"><div class="metric-label">Objeções</div><div class="metric-value">'+esc(c.metrics.objecoes)+'</div></div>'
+    +'<div class="metric-card"><div class="metric-label">Conversão</div><div class="metric-value">'+esc(c.metrics.conversao)+'</div></div>'
     +'</div></div>'
     +'<div class="synth-section"><h5>🎯 Análise</h5>'
-    +c.improvements.map(function(imp){
-      return '<div class="improve-item '+imp.type+'">'
-        +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">'
-        +'<span style="font-size:11px;font-weight:700" class="il-'+imp.type+'">'+esc(imp.label)+'</span></div>'
-        +'<div class="improve-title">'+esc(imp.title)+'</div>'
-        +'<div class="improve-text">'+esc(imp.text)+'</div>'
-        +'<div class="improve-tip">💡 '+esc(imp.tip)+'</div>'
-        +'</div>';
-    }).join('')+'</div>'
+    +c.improvements.map(imp=>
+      '<div class="improve-item '+imp.type+'">'
+      +'<span style="font-size:11px;font-weight:700" class="il-'+imp.type+'">'+esc(imp.label)+'</span>'
+      +'<div class="improve-title">'+esc(imp.title)+'</div>'
+      +'<div class="improve-text">'+esc(imp.text)+'</div>'
+      +'<div class="improve-tip">💡 '+esc(imp.tip)+'</div></div>'
+    ).join('')+'</div>'
     +(c.objecoes&&c.objecoes.length?
       '<div class="synth-section"><h5>🛡 Objeções</h5>'
-      +c.objecoes.map(function(o){
-        return '<div class="obj-card">'
-          +'<div style="font-size:12px;font-weight:600;margin-bottom:6px">'+esc(o.objecao)+'</div>'
-          +(o.resposta_dada?'<div style="display:flex;gap:6px;margin-bottom:4px;align-items:flex-start"><span class="obj-label dada">Como reagiu</span><span style="font-size:11px;color:#b0bac6;line-height:1.4;flex:1">'+esc(o.resposta_dada)+'</span></div>':'')
-          +(o.resposta_ideal?'<div style="display:flex;gap:6px;align-items:flex-start"><span class="obj-label ideal">Ideal</span><span style="font-size:11px;color:#b0bac6;line-height:1.4;flex:1">'+esc(o.resposta_ideal)+'</span></div>':'')
-          +'</div>';
-      }).join('')+'</div>'
-    :'');
+      +c.objecoes.map(o=>
+        '<div class="obj-card"><div style="font-size:12px;font-weight:600;margin-bottom:6px">'+esc(o.objecao)+'</div>'
+        +'<div style="display:flex;gap:6px;margin-bottom:4px;align-items:flex-start"><span class="obj-label dada">Como reagiu</span><span style="font-size:11px;color:#b0bac6;line-height:1.4;flex:1">'+esc(o.resposta_dada)+'</span></div>'
+        +'<div style="display:flex;gap:6px;align-items:flex-start"><span class="obj-label ideal">Ideal</span><span style="font-size:11px;color:#b0bac6;line-height:1.4;flex:1">'+esc(o.resposta_ideal)+'</span></div></div>'
+      ).join('')+'</div>':'');
 }
 function copyFollowup(){
   var text=document.getElementById('followupText').textContent;
-  navigator.clipboard.writeText(text).then(function(){
+  navigator.clipboard.writeText(text).then(()=>{
     var btn=document.querySelector('.copy-btn');
-    if(btn){btn.textContent='✓ Copiado';setTimeout(function(){btn.textContent='Copiar'},2000)}
+    if(btn){btn.textContent='Copiado';setTimeout(()=>btn.textContent='Copiar',2000)}
   });
 }
 renderList();
-if(CONVS.length>0) openConv(0);
+if(CONVS.length>0)openConv(0);
 </script>
 </body>
 </html>
