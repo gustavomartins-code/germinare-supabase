@@ -3,28 +3,437 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SalesCoach AI - Germinare 2026-05-13</title>
+<title>SalesCoach AI — Germinare 2026-05-13</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; background: #f3f4f6; color: #111; }
-.header { background: linear-gradient(135deg, #166534, #15803d); color: #fff; padding: 32px 24px; text-align: center; }
-.container { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #222536;
+    --border: #2e3247;
+    --text: #e8eaf0;
+    --muted: #7b82a0;
+    --green: #22c55e;
+    --green-dark: #166534;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --blue: #3b82f6;
+    --accent: #22c55e;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* TOPBAR */
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 52px; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .topbar-logo { font-size: 17px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+  .topbar-logo span.green { color: var(--green); }
+  .topbar-meta { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--muted); }
+  .topbar-meta .pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 4px 12px; color: var(--text); font-size: 13px; }
+  .topbar-meta .pill-green { background: rgba(34,197,94,.15); border-color: rgba(34,197,94,.3); color: var(--green); }
+
+  /* MAIN LAYOUT */
+  .layout { display: flex; flex: 1; overflow: hidden; }
+
+  /* LEFT SIDEBAR */
+  .sidebar { width: 300px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+  .sidebar-header { padding: 16px; border-bottom: 1px solid var(--border); }
+  .sidebar-title { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .search-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
+  .search-box input { background: none; border: none; outline: none; color: var(--text); font-size: 13px; width: 100%; }
+  .sidebar-list { flex: 1; overflow-y: auto; }
+  .sidebar-list::-webkit-scrollbar { width: 4px; }
+  .sidebar-list::-webkit-scrollbar-track { background: transparent; }
+  .sidebar-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .conv-item { padding: 14px 16px; cursor: pointer; border-bottom: 1px solid var(--border); transition: background .15s; position: relative; }
+  .conv-item:hover { background: var(--surface2); }
+  .conv-item.active { background: rgba(34,197,94,.08); border-left: 3px solid var(--green); }
+  .conv-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+  .conv-name { font-size: 14px; font-weight: 600; color: var(--text); }
+  .conv-time { font-size: 11px; color: var(--muted); }
+  .conv-preview { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 8px; }
+  .conv-tags { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .score-star { display: flex; align-items: center; gap: 3px; background: rgba(245,158,11,.15); border: 1px solid rgba(245,158,11,.3); border-radius: 10px; padding: 2px 7px; font-size: 12px; font-weight: 700; color: var(--amber); }
+  .tag { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 2px 8px; font-size: 11px; color: var(--muted); }
+  .status-tag { border-radius: 10px; padding: 2px 8px; font-size: 11px; font-weight: 600; }
+  .status-Fechado { background: rgba(34,197,94,.15); color: var(--green); border: 1px solid rgba(34,197,94,.3); }
+  .status-Em.andamento { background: rgba(59,130,246,.15); color: var(--blue); border: 1px solid rgba(59,130,246,.3); }
+  .status-Travado { background: rgba(245,158,11,.15); color: var(--amber); border: 1px solid rgba(245,158,11,.3); }
+  .status-Perdido { background: rgba(239,68,68,.15); color: var(--red); border: 1px solid rgba(239,68,68,.3); }
+
+  /* CHAT PANEL */
+  .chat-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); }
+  .chat-header { padding: 16px 20px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+  .chat-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #166534, #22c55e); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #fff; flex-shrink: 0; }
+  .chat-header-info { flex: 1; }
+  .chat-header-name { font-size: 15px; font-weight: 700; }
+  .chat-header-sub { font-size: 12px; color: var(--muted); }
+  .chat-messages { flex: 1; overflow-y: auto; padding: 20px 16px; display: flex; flex-direction: column; gap: 6px; background: #1a1f2e; }
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  .date-sep { text-align: center; margin: 12px 0 6px; }
+  .date-sep span { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 4px 14px; font-size: 12px; color: var(--muted); }
+  .msg-row { display: flex; }
+  .msg-row.sent { justify-content: flex-end; }
+  .msg-row.recv { justify-content: flex-start; }
+  .bubble { max-width: 68%; padding: 8px 12px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+  .msg-row.sent .bubble { background: #1d4a2f; border-radius: 12px 0 12px 12px; }
+  .msg-row.recv .bubble { background: var(--surface2); border-radius: 0 12px 12px 12px; }
+  .bubble-sender { font-size: 11px; font-weight: 700; margin-bottom: 3px; }
+  .msg-row.sent .bubble-sender { color: #4ade80; }
+  .msg-row.recv .bubble-sender { color: #60a5fa; }
+  .bubble-text { font-size: 14px; color: var(--text); line-height: 1.45; word-break: break-word; }
+  .bubble-time { font-size: 11px; color: var(--muted); text-align: right; margin-top: 4px; }
+
+  .followup-bar { padding: 12px 16px; background: var(--surface); border-top: 1px solid var(--border); flex-shrink: 0; }
+  .followup-label { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+  .followup-label::before { content: "→"; color: var(--green); }
+  .followup-content { display: flex; align-items: center; gap: 10px; }
+  .followup-text { flex: 1; font-size: 13px; color: var(--text); background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; line-height: 1.4; }
+  .copy-btn { background: rgba(34,197,94,.15); border: 1px solid rgba(34,197,94,.3); color: var(--green); border-radius: 8px; padding: 8px 14px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: background .15s; }
+  .copy-btn:hover { background: rgba(34,197,94,.25); }
+
+  /* RIGHT PANEL */
+  .analysis-panel { width: 280px; flex-shrink: 0; background: var(--surface); border-left: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; }
+  .analysis-panel::-webkit-scrollbar { width: 4px; }
+  .analysis-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  .ap-section { padding: 16px; border-bottom: 1px solid var(--border); }
+  .ap-label { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .score-ring-wrap { display: flex; align-items: center; gap: 14px; }
+  .score-ring { position: relative; width: 64px; height: 64px; flex-shrink: 0; }
+  .score-ring svg { transform: rotate(-90deg); }
+  .score-ring-val { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; }
+  .score-info-label { font-size: 15px; font-weight: 700; line-height: 1.3; }
+  .score-info-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .metric-cell { background: var(--surface2); border-radius: 8px; padding: 10px; }
+  .metric-val { font-size: 18px; font-weight: 800; }
+  .metric-val.green { color: var(--green); }
+  .metric-val.amber { color: var(--amber); }
+  .metric-val.red { color: var(--red); }
+  .metric-val.blue { color: var(--blue); }
+  .metric-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .improvement-item { margin-bottom: 10px; background: var(--surface2); border-radius: 10px; padding: 12px; cursor: pointer; transition: background .15s; }
+  .improvement-item:hover { background: #2a2d42; }
+  .imp-header { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
+  .imp-badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; white-space: nowrap; flex-shrink: 0; }
+  .imp-badge.good { background: rgba(34,197,94,.15); color: var(--green); }
+  .imp-badge.warn { background: rgba(245,158,11,.15); color: var(--amber); }
+  .imp-badge.bad { background: rgba(239,68,68,.15); color: var(--red); }
+  .imp-title { font-size: 13px; font-weight: 700; color: var(--text); }
+  .imp-text { font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .imp-tip { font-size: 12px; color: #60a5fa; margin-top: 6px; line-height: 1.4; }
+  .imp-detail { display: none; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
+  .improvement-item.open .imp-detail { display: block; }
+
+  .obj-item { background: var(--surface2); border-radius: 8px; padding: 12px; margin-bottom: 8px; }
+  .obj-q { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .obj-row { font-size: 12px; margin-bottom: 3px; }
+  .obj-row span.label { color: var(--muted); }
+  .obj-row span.bad { color: var(--red); }
+  .obj-row span.good { color: var(--green); }
+
+  .sintese-text { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+  /* STATS BAR */
+  .stats-bar { display: flex; gap: 0; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .stat-cell { flex: 1; padding: 10px 16px; border-right: 1px solid var(--border); text-align: center; }
+  .stat-cell:last-child { border-right: none; }
+  .stat-n { font-size: 20px; font-weight: 800; }
+  .stat-l { font-size: 11px; color: var(--muted); }
+
+  /* EMPTY STATE */
+  .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--muted); gap: 8px; }
+  .empty-state .big { font-size: 40px; }
+  .empty-state p { font-size: 14px; }
+
+  @media (max-width: 900px) {
+    .sidebar { width: 240px; }
+    .analysis-panel { width: 240px; }
+  }
+  @media (max-width: 650px) {
+    .sidebar { display: none; }
+    .analysis-panel { display: none; }
+  }
 </style>
 </head>
 <body>
-<div class="header">
-    <div style="font-size:32px;font-weight:800;letter-spacing:-1px">SalesCoach AI</div>
-    <div style="opacity:.85;margin-top:4px">2026-05-13 &middot; Germinare &middot; 1 negociacao avaliada</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#166534"/><path d="M8 16c1-3 3-5 5-6M12 10c0-2 1-4 3-4" stroke="#4ade80" stroke-width="2" stroke-linecap="round"/></svg>
+    <span><span class="green">Sales</span>Coach AI</span> <span style="color:var(--muted);font-weight:400">— Germinare</span>
+  </div>
+  <div class="topbar-meta">
+    <span class="pill">📅 2026-05-13</span>
+    <span class="pill pill-green" id="neg-count">+ 1 negociações de 9 conversas</span>
+  </div>
 </div>
-<div class="container">
-    <div style="background:#fff;border-radius:12px;padding:20px 24px;margin-bottom:24px;display:flex;gap:24px;flex-wrap:wrap;box-shadow:0 1px 4px rgba(0,0,0,.06)">
-        <div style="text-align:center;flex:1"><div style="font-size:28px;font-weight:700">9</div><div style="color:#6b7280;font-size:13px">Conversas encontradas</div></div>
-        <div style="text-align:center;flex:1"><div style="font-size:28px;font-weight:700">9</div><div style="color:#6b7280;font-size:13px">Pos F1</div></div>
-        <div style="text-align:center;flex:1"><div style="font-size:28px;font-weight:700;color:#dc2626">1</div><div style="color:#6b7280;font-size:13px">Negociacoes avaliadas</div></div>
-        <div style="text-align:center;flex:1"><div style="font-size:28px;font-weight:700;color:#dc2626">3.5</div><div style="color:#6b7280;font-size:13px">Score medio</div></div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-cell"><div class="stat-n">9</div><div class="stat-l">Conversas</div></div>
+  <div class="stat-cell"><div class="stat-n">9</div><div class="stat-l">Pós F1</div></div>
+  <div class="stat-cell"><div class="stat-n" style="color:var(--green)">1</div><div class="stat-l">Negociações</div></div>
+  <div class="stat-cell"><div class="stat-n" style="color:var(--amber)">3.5</div><div class="stat-l">Score médio</div></div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">Negociações do dia</div>
+      <div class="search-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" placeholder="Buscar..." id="search-input" oninput="filterConvs(this.value)">
+      </div>
     </div>
-    <div style="background:#fff;border-radius:16px;box-shadow:0 2px 16px rgba(0,0,0,.08);margin:24px 0;overflow:hidden"><div style="padding:20px 24px;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;gap:16px;flex-wrap:wrap"><div style="flex:1"><div style="font-size:20px;font-weight:700;color:#111">Fabricio</div><div style="color:#6b7280;margin-top:2px">DDGS &middot; Fabricio &middot; 9 msgs</div></div><div style="text-align:center"><div style="font-size:36px;font-weight:800;color:#dc2626">3.5</div><div style="font-size:12px;color:#6b7280">Baixo foco comercial</div><div style="background:#e5e7eb;border-radius:4px;height:6px;width:100px;margin-top:4px"><div style="background:#dc2626;width:35%;height:100%;border-radius:4px"></div></div></div><div><span style="background:#ca8a04;color:#fff;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600">Travado</span></div></div><div style="padding:20px 24px"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:20px"><div style="background:#f9fafb;border-radius:8px;padding:12px;text-align:center"><div style="font-size:20px;font-weight:700">115min</div><div style="font-size:12px;color:#6b7280">Resp. media</div></div><div style="background:#f9fafb;border-radius:8px;padding:12px;text-align:center"><div style="font-size:20px;font-weight:700">1</div><div style="font-size:12px;color:#6b7280">Objecoes</div></div><div style="background:#f9fafb;border-radius:8px;padding:12px;text-align:center"><div style="font-size:20px;font-weight:700">Nao</div><div style="font-size:12px;color:#6b7280">Conversao</div></div></div><p style="color:#374151;margin:0 0 16px">O vendedor ignorou a oportunidade de fechamento imediato de 90 toneladas para discutir processos burocraticos. A negociacao de preco ficou pendente e sem resposta objetiva.</p><h4 style="margin:0 0 8px;color:#111">Analise da Conversa</h4><div style="border-left:4px solid #dc2626;background:#fef2f2;padding:12px 16px;margin:8px 0;border-radius:0 8px 8px 0"><div style="font-weight:700;color:#dc2626">Melhora Urgente -- Ignorou o Fechamento</div><div style="margin:4px 0;color:#374151">Fabricio mudou de assunto sem responder sobre o BID de R$ 1.180 ou a possibilidade de fechar a R$ 1.200.</div><div style="font-size:13px;color:#6b7280">Dica: Responda sempre o status da carga atual (fechamento) antes de trazer novas demandas de prospeccao.</div><div style="font-size:12px;color:#9ca3af;margin-top:4px">Ref: "Levamos o 1200?"</div></div><div style="border-left:4px solid #ca8a04;background:#fffbeb;padding:12px 16px;margin:8px 0;border-radius:0 8px 8px 0"><div style="font-weight:700;color:#ca8a04">Atencao -- Tempo de Reacao</div><div style="margin:4px 0;color:#374151">Demorou quase duas horas para responder a uma mensagem decisiva de fechamento.</div><div style="font-size:13px;color:#6b7280">Dica: No mercado de brokers, a velocidade entre o BID e a resposta do fornecedor define a margem e o fechamento.</div><div style="font-size:12px;color:#9ca3af;margin-top:4px">Ref: "[11:41] Vanessa... [13:36] Fabricio"</div></div><h4 style="margin:16px 0 8px;color:#111">Objecoes</h4><div style="background:#fef3c7;border-radius:8px;padding:12px;margin:6px 0"><div><b>Objecao:</b> Restricao operacional para revenda de DDGS ensacado por cooperativa.</div><div style="color:#dc2626"><b>Como reagiu:</b> Aceitacao passiva (blz e sim).</div><div style="color:#16a34a"><b>Ideal:</b> Propor solucao alternativa, como faturamento direto aos cooperados ou industrializacao por encomenda.</div></div><h4 style="margin:16px 0 8px;color:#111">Follow-up Sugerido</h4><div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px;font-style:italic;color:#1e40af">Vanessa, sobre as 90t: o cliente nao aceita os R$ 1.200? Vou tentar apertar o fornecedor nos R$ 1.180 agora. Sobre a cooperativa de Maceio, ja estou falando com o Lele para ver se conseguimos faturar via ordem de entrega para os cooperados e resolver o bloqueio da revenda.</div><h4 style="margin:16px 0 8px;color:#111">Conversa</h4><div style="background:#e5ddd5;border-radius:12px;padding:16px;max-height:400px;overflow-y:auto;font-family:sans-serif"><div style="display:flex;justify-content:flex-end;margin:4px 0"><div style="background:#dcf8c6;padding:8px 12px;border-radius:12px 0 12px 12px;max-width:70%;box-shadow:0 1px 2px rgba(0,0,0,.1)"><div style="font-size:11px;color:#075e54;font-weight:600;margin-bottom:2px">Vanessa</div><div style="color:#111;font-size:14px">Leandro precisava chegar esse aqui a R$1.180 hein , fechar 90 ton</div><div style="font-size:11px;color:#999;text-align:right;margin-top:2px">11:40</div></div></div><div style="display:flex;justify-content:flex-end;margin:4px 0"><div style="background:#dcf8c6;padding:8px 12px;border-radius:12px 0 12px 12px;max-width:70%;box-shadow:0 1px 2px rgba(0,0,0,.1)"><div style="font-size:11px;color:#075e54;font-weight:600;margin-bottom:2px">Vanessa</div><div style="color:#111;font-size:14px">Levamos o 1200?</div><div style="font-size:11px;color:#999;text-align:right;margin-top:2px">11:41</div></div></div><div style="display:flex;justify-content:flex-end;margin:4px 0"><div style="background:#dcf8c6;padding:8px 12px;border-radius:12px 0 12px 12px;max-width:70%;box-shadow:0 1px 2px rgba(0,0,0,.1)"><div style="font-size:11px;color:#075e54;font-weight:600;margin-bottom:2px">Vanessa</div><div style="color:#111;font-size:14px">Bom dia</div><div style="font-size:11px;color:#999;text-align:right;margin-top:2px">11:41</div></div></div><div style="display:flex;justify-content:flex-start;margin:4px 0"><div style="background:#fff;padding:8px 12px;border-radius:0 12px 12px 12px;max-width:70%;box-shadow:0 1px 2px rgba(0,0,0,.1)"><div style="font-size:11px;color:#128c7e;font-weight:600;margin-bottom:2px">Fabricio</div><div style="color:#111;font-size:14px">[unknown]</div><div style="font-size:11px;color:#999;text-align:right;margin-top:2px">11:44</div></div></div><div style="display:flex;justify-content:flex-start;margin:4px 0"><div style="background:#fff;padding:8px 12px;border-radius:0 12px 12px 12px;max-width:70%;box-shadow:0 1px 2px rgba(0,0,0,.1)"><div style="font-size:11px;color:#128c7e;font-weight:600;margin-bottom:2px">Fabricio</div><div style="color:#111;font-size:14px">Senhora preciso saber como fica o processo de revenda do ddgs , eu capitei uma cooperativa em Maceió eles querem comprar tanto para consumo próprio deles na produçao de raçao deles porém eles querem ensacar esse produto para revender para os cooperados</div><div style="font-size:11px;color:#999;text-align:right;margin-top:2px">13:36</div></div></div><div style="display:flex;justify-content:flex-end;margin:4px 0"><div style="background:#dcf8c6;padding:8px 12px;border-radius:12px 0 12px 12px;max-width:70%;box-shadow:0 1px 2px rgba(0,0,0,.1)"><div style="font-size:11px;color:#075e54;font-weight:600;margin-bottom:2px">Vanessa</div><div style="color:#111;font-size:14px">a priori estava barrado</div><div style="font-size:11px;color:#999;text-align:right;margin-top:2px">13:44</div></div></div><div style="display:flex;justify-content:flex-end;margin:4px 0"><div style="background:#dcf8c6;padding:8px 12px;border-radius:12px 0 12px 12px;max-width:70%;box-shadow:0 1px 2px rgba(0,0,0,.1)"><div style="font-size:11px;color:#075e54;font-weight:600;margin-bottom:2px">Vanessa</div><div style="color:#111;font-size:14px">flaa com o lele</div><div style="font-size:11px;color:#999;text-align:right;margin-top:2px">13:44</div></div></div><div style="display:flex;justify-content:flex-start;margin:4px 0"><div style="background:#fff;padding:8px 12px;border-radius:0 12px 12px 12px;max-width:70%;box-shadow:0 1px 2px rgba(0,0,0,.1)"><div style="font-size:11px;color:#128c7e;font-weight:600;margin-bottom:2px">Fabricio</div><div style="color:#111;font-size:14px">blz</div><div style="font-size:11px;color:#999;text-align:right;margin-top:2px">13:49</div></div></div><div style="display:flex;justify-content:flex-end;margin:4px 0"><div style="background:#dcf8c6;padding:8px 12px;border-radius:12px 0 12px 12px;max-width:70%;box-shadow:0 1px 2px rgba(0,0,0,.1)"><div style="font-size:11px;color:#075e54;font-weight:600;margin-bottom:2px">Vanessa</div><div style="color:#111;font-size:14px">me avisa dps</div><div style="font-size:11px;color:#999;text-align:right;margin-top:2px">14:17</div></div></div><div style="display:flex;justify-content:flex-end;margin:4px 0"><div style="background:#dcf8c6;padding:8px 12px;border-radius:12px 0 12px 12px;max-width:70%;box-shadow:0 1px 2px rgba(0,0,0,.1)"><div style="font-size:11px;color:#075e54;font-weight:600;margin-bottom:2px">Vanessa</div><div style="color:#111;font-size:14px">como que ficou</div><div style="font-size:11px;color:#999;text-align:right;margin-top:2px">14:17</div></div></div><div style="display:flex;justify-content:flex-start;margin:4px 0"><div style="background:#fff;padding:8px 12px;border-radius:0 12px 12px 12px;max-width:70%;box-shadow:0 1px 2px rgba(0,0,0,.1)"><div style="font-size:11px;color:#128c7e;font-weight:600;margin-bottom:2px">Fabricio</div><div style="color:#111;font-size:14px">si</div><div style="font-size:11px;color:#999;text-align:right;margin-top:2px">14:22</div></div></div><div style="display:flex;justify-content:flex-start;margin:4px 0"><div style="background:#fff;padding:8px 12px;border-radius:0 12px 12px 12px;max-width:70%;box-shadow:0 1px 2px rgba(0,0,0,.1)"><div style="font-size:11px;color:#128c7e;font-weight:600;margin-bottom:2px">Fabricio</div><div style="color:#111;font-size:14px">sim</div><div style="font-size:11px;color:#999;text-align:right;margin-top:2px">14:22</div></div></div></div></div></div>
+    <div class="sidebar-list" id="sidebar-list"></div>
+  </div>
+
+  <!-- CHAT PANEL -->
+  <div class="chat-panel" id="chat-panel">
+    <div class="empty-state" id="empty-state">
+      <div class="big">💬</div>
+      <p>Selecione uma negociação para ver a conversa</p>
+    </div>
+    <div id="chat-content" style="display:none;flex:1;display:none;flex-direction:column;overflow:hidden;">
+      <div class="chat-header" id="chat-header"></div>
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="followup-bar" id="followup-bar"></div>
+    </div>
+  </div>
+
+  <!-- ANALYSIS PANEL -->
+  <div class="analysis-panel" id="analysis-panel">
+    <div style="padding:20px;color:var(--muted);font-size:13px;text-align:center;margin-top:40px">
+      Selecione uma conversa para ver a análise
+    </div>
+  </div>
+
 </div>
-<script>const CONVS=[{"chat": "Fabricio", "score": 3.5, "scoreLabel": "Baixo foco comercial", "summary": "O vendedor ignorou a oportunidade de fechamento imediato de 90 toneladas para discutir processos burocraticos. A negociacao de preco ficou pendente e sem resposta objetiva.", "status": "Travado", "vendedor": "Fabricio", "produto": "DDGS", "metrics": {"respostaMed": "115min", "objecoes": "1", "conversao": "Nao", "msgs": "9"}, "improvements": [{"type": "bad", "label": "Melhora Urgente", "title": "Ignorou o Fechamento", "text": "Fabricio mudou de assunto sem responder sobre o BID de R$ 1.180 ou a possibilidade de fechar a R$ 1.200.", "tip": "Responda sempre o status da carga atual (fechamento) antes de trazer novas demandas de prospeccao.", "msgRef": "Levamos o 1200?"}, {"type": "warn", "label": "Atencao", "title": "Tempo de Reacao", "text": "Demorou quase duas horas para responder a uma mensagem decisiva de fechamento.", "tip": "No mercado de brokers, a velocidade entre o BID e a resposta do fornecedor define a margem e o fechamento.", "msgRef": "[11:41] Vanessa... [13:36] Fabricio"}], "objecoes": [{"objecao": "Restricao operacional para revenda de DDGS ensacado por cooperativa.", "resposta_dada": "Aceitacao passiva (blz e sim).", "resposta_ideal": "Propor solucao alternativa, como faturamento direto aos cooperados ou industrializacao por encomenda."}], "followupMsg": "Vanessa, sobre as 90t: o cliente nao aceita os R$ 1.200? Vou tentar apertar o fornecedor nos R$ 1.180 agora. Sobre a cooperativa de Maceio, ja estou falando com o Lele para ver se conseguimos faturar via ordem de entrega para os cooperados e resolver o bloqueio da revenda.", "mensagens": [{"hora": "11:40", "de": "Vanessa", "from_me": true, "texto": "Leandro precisava chegar esse aqui a R$1.180 hein , fechar 90 ton", "tipo": "text", "audio_url": null}, {"hora": "11:41", "de": "Vanessa", "from_me": true, "texto": "Levamos o 1200?", "tipo": "text", "audio_url": null}, {"hora": "11:41", "de": "Vanessa", "from_me": true, "texto": "Bom dia", "tipo": "text", "audio_url": null}, {"hora": "11:44", "de": "Fabricio", "from_me": false, "texto": null, "tipo": "unknown", "audio_url": null}, {"hora": "13:36", "de": "Fabricio", "from_me": false, "texto": "Senhora preciso saber como fica o processo de revenda do ddgs , eu capitei uma cooperativa em Maceió eles querem comprar tanto para consumo próprio deles na produçao de raçao deles porém eles querem ensacar esse produto para revender para os cooperados", "tipo": "text", "audio_url": null}, {"hora": "13:44", "de": "Vanessa", "from_me": true, "texto": "a priori estava barrado", "tipo": "text", "audio_url": null}, {"hora": "13:44", "de": "Vanessa", "from_me": true, "texto": "flaa com o lele", "tipo": "text", "audio_url": null}, {"hora": "13:49", "de": "Fabricio", "from_me": false, "texto": "blz", "tipo": "text", "audio_url": null}, {"hora": "14:17", "de": "Vanessa", "from_me": true, "texto": "me avisa dps", "tipo": "text", "audio_url": null}, {"hora": "14:17", "de": "Vanessa", "from_me": true, "texto": "como que ficou", "tipo": "text", "audio_url": null}, {"hora": "14:22", "de": "Fabricio", "from_me": false, "texto": "si", "tipo": "text", "audio_url": null}, {"hora": "14:22", "de": "Fabricio", "from_me": false, "texto": "sim", "tipo": "text", "audio_url": null}]}];</script>
+
+<script>
+const CONVS = [{"chat": "Fabricio", "score": 3.5, "scoreLabel": "Baixo foco comercial", "summary": "O vendedor ignorou a oportunidade de fechamento imediato de 90 toneladas para discutir processos burocráticos. A negociação de preço ficou pendente e sem resposta objetiva.", "status": "Travado", "vendedor": "Fabricio", "produto": "DDGS", "metrics": {"respostaMed": "115min", "objecoes": "1", "conversao": "Não", "msgs": "9"}, "improvements": [{"type": "bad", "label": "🚨 Melhora Urgente", "title": "Ignorou o Fechamento", "text": "Fabricio mudou de assunto sem responder sobre o BID de R$ 1.180 ou a possibilidade de fechar a R$ 1.200.", "tip": "Responda sempre o status da carga atual (fechamento) antes de trazer novas demandas de prospecção.", "msgRef": "Levamos o 1200?"}, {"type": "warn", "label": "⚠️ Atenção", "title": "Tempo de Reação", "text": "Demorou quase duas horas para responder a uma mensagem decisiva de fechamento.", "tip": "No mercado de brokers, a velocidade entre o BID e a resposta define a margem e o fechamento.", "msgRef": "[11:41] Vanessa... [13:36] Fabricio"}], "objecoes": [{"objecao": "Restrição operacional para revenda de DDGS ensacado por cooperativa.", "resposta_dada": "Aceitação passiva ('blz' e 'sim').", "resposta_ideal": "Propor solução alternativa, como faturamento direto aos cooperados ou industrialização por encomenda."}], "followupMsg": "Vanessa, sobre as 90t: o cliente não aceita os R$ 1.200? Vou tentar apertar o fornecedor nos R$ 1.180 agora. Sobre a cooperativa de Maceió, já estou falando com o Lelé para ver se conseguimos faturar via 'ordem de entrega' para os cooperados e resolver o bloqueio da revenda.", "mensagens": [{"hora": "11:40", "de": "Vanessa", "from_me": true, "texto": "Leandro precisava chegar esse aqui a R$1.180 hein , fechar 90 ton", "tipo": "text", "audio_url": null}, {"hora": "11:41", "de": "Vanessa", "from_me": true, "texto": "Levamos o 1200?", "tipo": "text", "audio_url": null}, {"hora": "11:41", "de": "Vanessa", "from_me": true, "texto": "Bom dia", "tipo": "text", "audio_url": null}, {"hora": "11:44", "de": "Fabricio", "from_me": false, "texto": null, "tipo": "unknown", "audio_url": null}, {"hora": "13:36", "de": "Fabricio", "from_me": false, "texto": "Senhora preciso saber como fica o processo de revenda do ddgs , eu capitei uma cooperativa em Maceió eles querem comprar tanto para consumo próprio deles na produçao de raçao deles porém eles querem ensacar esse produto para revender para os cooperados", "tipo": "text", "audio_url": null}, {"hora": "13:44", "de": "Vanessa", "from_me": true, "texto": "a priori estava barrado", "tipo": "text", "audio_url": null}, {"hora": "13:44", "de": "Vanessa", "from_me": true, "texto": "flaa com o lele", "tipo": "text", "audio_url": null}, {"hora": "13:49", "de": "Fabricio", "from_me": false, "texto": "blz", "tipo": "text", "audio_url": null}, {"hora": "14:17", "de": "Vanessa", "from_me": true, "texto": "me avisa dps", "tipo": "text", "audio_url": null}, {"hora": "14:17", "de": "Vanessa", "from_me": true, "texto": "como que ficou", "tipo": "text", "audio_url": null}, {"hora": "14:22", "de": "Fabricio", "from_me": false, "texto": "si", "tipo": "text", "audio_url": null}, {"hora": "14:22", "de": "Fabricio", "from_me": false, "texto": "sim", "tipo": "text", "audio_url": null}]}];
+
+function scoreColor(s) {
+  if (s >= 8) return '#22c55e';
+  if (s >= 6) return '#f59e0b';
+  return '#ef4444';
+}
+
+function statusClass(st) {
+  return 'status-' + (st || '').replace(' ', '.');
+}
+
+function escHtml(s) {
+  if (!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// Build sidebar
+function buildSidebar(list) {
+  const el = document.getElementById('sidebar-list');
+  el.innerHTML = list.map((c, i) => {
+    const sc = scoreColor(c.score);
+    const lastMsg = c.mensagens.length ? c.mensagens[c.mensagens.length-1] : null;
+    const preview = lastMsg ? escHtml(lastMsg.texto || '[' + (lastMsg.tipo||'') + ']') : '';
+    const lastTime = lastMsg ? lastMsg.hora : '';
+    const statusCls = 'status-' + c.status;
+    return `<div class="conv-item" id="ci-${i}" onclick="selectConv(${i})">
+      <div class="conv-top">
+        <span class="conv-name">${escHtml(c.chat)}</span>
+        <span class="conv-time">${lastTime}</span>
+      </div>
+      <div class="conv-preview">${preview}</div>
+      <div class="conv-tags">
+        <span class="score-star">★ ${c.score}</span>
+        <span class="tag">${escHtml(c.produto)}</span>
+        <span class="status-tag ${statusCls}">${escHtml(c.status)}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterConvs(q) {
+  const qq = q.toLowerCase();
+  CONVS.forEach((c, i) => {
+    const el = document.getElementById('ci-' + i);
+    if (el) el.style.display = (!qq || c.chat.toLowerCase().includes(qq) || c.produto.toLowerCase().includes(qq)) ? '' : 'none';
+  });
+}
+
+let currentConv = null;
+
+function selectConv(i) {
+  currentConv = i;
+  const c = CONVS[i];
+
+  // Highlight sidebar
+  document.querySelectorAll('.conv-item').forEach(el => el.classList.remove('active'));
+  const ci = document.getElementById('ci-' + i);
+  if (ci) ci.classList.add('active');
+
+  // Show chat content
+  document.getElementById('empty-state').style.display = 'none';
+  const cc = document.getElementById('chat-content');
+  cc.style.display = 'flex';
+  cc.style.flexDirection = 'column';
+  cc.style.overflow = 'hidden';
+  cc.style.flex = '1';
+
+  // Header
+  const initials = c.chat.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('chat-header').innerHTML = `
+    <div class="chat-avatar">${initials}</div>
+    <div class="chat-header-info">
+      <div class="chat-header-name">${escHtml(c.chat)}</div>
+      <div class="chat-header-sub">${c.metrics.msgs} mensagens · ${escHtml(c.vendedor)}</div>
+    </div>
+    <span class="status-tag status-${escHtml(c.status)}">${escHtml(c.status)}</span>
+  `;
+
+  // Messages
+  const msgsEl = document.getElementById('chat-messages');
+  let html = `<div class="date-sep"><span>${c.chat} · ` + data_ref + `</span></div>`;
+  c.mensagens.forEach(m => {
+    const side = m.from_me ? 'sent' : 'recv';
+    const sender = escHtml(m.de || (m.from_me ? 'Vanessa' : c.chat));
+    const txt = escHtml(m.texto || '[' + (m.tipo||'') + ']');
+    html += `<div class="msg-row ${side}">
+      <div class="bubble">
+        <div class="bubble-sender">${sender}</div>
+        <div class="bubble-text">${txt}</div>
+        <div class="bubble-time">${m.hora || ''}</div>
+      </div>
+    </div>`;
+  });
+  msgsEl.innerHTML = html;
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+
+  // Follow-up
+  document.getElementById('followup-bar').innerHTML = `
+    <div class="followup-label">Follow-up Sugerido pela IA</div>
+    <div class="followup-content">
+      <div class="followup-text" id="fup-text-${i}">${escHtml(c.followupMsg)}</div>
+      <button class="copy-btn" onclick="copyFollowup(${i})">Copiar</button>
+    </div>
+  `;
+
+  // Analysis panel
+  const sc = c.score;
+  const scColor = scoreColor(sc);
+  const radius = 26;
+  const circ = 2 * Math.PI * radius;
+  const dash = (sc / 10) * circ;
+
+  let improvHtml = '';
+  c.improvements.forEach((imp, ii) => {
+    improvHtml += `<div class="improvement-item" id="imp-${i}-${ii}" onclick="toggleImp(${i},${ii})">
+      <div class="imp-header">
+        <span class="imp-badge ${imp.type}">${escHtml(imp.label)}</span>
+      </div>
+      <div class="imp-title">${escHtml(imp.title)}</div>
+      <div class="imp-text">${escHtml(imp.text)}</div>
+      <div class="imp-detail">
+        <div class="imp-tip">💡 ${escHtml(imp.tip)}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px">Ref: "${escHtml(imp.msgRef)}"</div>
+      </div>
+    </div>`;
+  });
+
+  let objHtml = '';
+  (c.objecoes || []).forEach(o => {
+    objHtml += `<div class="obj-item">
+      <div class="obj-q">${escHtml(o.objecao)}</div>
+      <div class="obj-row"><span class="label">Reagiu: </span><span class="bad">${escHtml(o.resposta_dada)}</span></div>
+      <div class="obj-row"><span class="label">Ideal: </span><span class="good">${escHtml(o.resposta_ideal)}</span></div>
+    </div>`;
+  });
+
+  const metricColor = (key, val) => {
+    if (key === 'conversao') return val === 'Sim' ? 'green' : val === 'Parcial' ? 'amber' : 'red';
+    if (key === 'respostaMed') return 'amber';
+    if (key === 'objecoes') return parseInt(val) > 2 ? 'red' : 'amber';
+    return 'blue';
+  };
+
+  document.getElementById('analysis-panel').innerHTML = `
+    <div class="ap-section">
+      <div class="ap-label">📊 Análise IA</div>
+      <div class="score-ring-wrap">
+        <div class="score-ring">
+          <svg width="64" height="64" viewBox="0 0 64 64">
+            <circle cx="32" cy="32" r="${radius}" fill="none" stroke="var(--surface2)" stroke-width="6"/>
+            <circle cx="32" cy="32" r="${radius}" fill="none" stroke="${scColor}" stroke-width="6"
+              stroke-dasharray="${dash.toFixed(2)} ${circ.toFixed(2)}" stroke-linecap="round"/>
+          </svg>
+          <div class="score-ring-val" style="color:${scColor}">${sc}</div>
+        </div>
+        <div>
+          <div class="score-info-label" style="color:${scColor}">${escHtml(c.scoreLabel)}</div>
+          <div class="score-info-sub">${escHtml(c.status)} · ${c.metrics.msgs} msgs</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ap-section">
+      <div class="ap-label">📝 Síntese</div>
+      <div class="sintese-text">${escHtml(c.summary)}</div>
+    </div>
+
+    <div class="ap-section">
+      <div class="ap-label">📈 Métricas</div>
+      <div class="metrics-grid">
+        <div class="metric-cell">
+          <div class="metric-val ${metricColor('respostaMed', c.metrics.respostaMed)}">${escHtml(c.metrics.respostaMed)}</div>
+          <div class="metric-lbl">Resp. Média</div>
+        </div>
+        <div class="metric-cell">
+          <div class="metric-val ${metricColor('objecoes', c.metrics.objecoes)}">${escHtml(c.metrics.objecoes)}</div>
+          <div class="metric-lbl">Objeções</div>
+        </div>
+        <div class="metric-cell">
+          <div class="metric-val blue">${escHtml(c.metrics.msgs)}</div>
+          <div class="metric-lbl">Mensagens</div>
+        </div>
+        <div class="metric-cell">
+          <div class="metric-val ${metricColor('conversao', c.metrics.conversao)}">${escHtml(c.metrics.conversao)}</div>
+          <div class="metric-lbl">Conversão</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ap-section">
+      <div class="ap-label">💡 Análise</div>
+      ${improvHtml}
+    </div>
+
+    ${objHtml ? `<div class="ap-section"><div class="ap-label">🧱 Objeções</div>${objHtml}</div>` : ''}
+  `;
+}
+
+function toggleImp(ci, ii) {
+  const el = document.getElementById(`imp-${ci}-${ii}`);
+  if (el) el.classList.toggle('open');
+}
+
+function copyFollowup(i) {
+  const el = document.getElementById(`fup-text-${i}`);
+  if (!el) return;
+  navigator.clipboard.writeText(el.innerText).then(() => {
+    const btn = el.nextElementSibling;
+    if (btn) { btn.textContent = 'Copiado!'; setTimeout(() => btn.textContent = 'Copiar', 1500); }
+  });
+}
+
+// Init
+buildSidebar(CONVS);
+if (CONVS.length > 0) selectConv(0);
+</script>
 </body>
 </html>
