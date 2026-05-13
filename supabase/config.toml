@@ -1,0 +1,7 @@
+project_id = "pgmtlxgihzongbuncnpm"
+
+[functions.zapi-webhook]
+verify_jwt = false
+
+[functions.whatsapp-historico]
+verify_jwt = false
