@@ -44,11 +44,14 @@ serve(async (req: Request) => {
     return json({ error: error.message }, 500);
   }
 
-  // Agrupa por contato (sender_name) se não foi filtrado por um contato específico
+  // Agrupa por chat_name (inclui mensagens enviadas e recebidas) se não foi filtrado por contato específico
   if (!sender_name) {
     const grouped: Record<string, any[]> = {};
     for (const msg of data ?? []) {
-      const key = msg.sender_name || msg.phone || "desconhecido";
+      // Ignorar grupos
+      if (msg.is_group) continue;
+      // Agrupar pelo nome do chat (conversa), não pelo remetente
+      const key = msg.chat_name || msg.phone || "desconhecido";
       if (!grouped[key]) grouped[key] = [];
       grouped[key].push(formatMsg(msg));
     }
