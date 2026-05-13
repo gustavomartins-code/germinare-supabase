@@ -3,238 +3,607 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SalesCoach AI — Germinare</title>
+<title>SalesCoach AI — Germinare 2026-05-13</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
-  :root{--bg:#0d0f12;--surface:#161a1f;--surface2:#1e2329;--border:#2a2f38;--text:#e8ecf0;--muted:#6b7a8d;--accent:#25d366;--accent2:#128c7e;--warn:#f59e0b;--danger:#ef4444;--info:#3b82f6;--highlight:rgba(37,211,102,0.12)}
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column}
-  .topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-  .topbar-brand{display:flex;align-items:center;gap:10px}
-  .topbar-logo{width:28px;height:28px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
-  .topbar-title{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;letter-spacing:-.3px}
-  .topbar-title span{color:var(--accent)}
-  .topbar-meta{display:flex;gap:12px;align-items:center}
-  .pill{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:4px 14px;font-size:12px;color:var(--muted);font-weight:500}
-  .app-layout{display:flex;flex:1;overflow:hidden}
-  .conv-list{width:300px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
-  .conv-list-header{padding:14px 16px 10px;border-bottom:1px solid var(--border);flex-shrink:0}
-  .conv-list-header h3{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:10px}
-  .search-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;display:flex;align-items:center;gap:8px}
-  .search-box input{background:transparent;border:none;outline:none;color:var(--text);font-size:12px;width:100%;font-family:'DM Sans',sans-serif}
-  .search-box input::placeholder{color:var(--muted)}
-  .conv-items{flex:1;overflow-y:auto;padding:8px 0}
-  .conv-item{padding:12px 16px;cursor:pointer;border-left:3px solid transparent;transition:all .15s}
-  .conv-item:hover{background:var(--surface2)}
-  .conv-item.active{background:var(--highlight);border-left-color:var(--accent)}
-  .conv-item-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px}
-  .conv-name{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:175px}
-  .conv-time{font-size:11px;color:var(--muted);flex-shrink:0}
-  .conv-preview{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:8px}
-  .conv-footer{display:flex;justify-content:space-between;align-items:center}
-  .score-badge{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px}
-  .score-good{background:rgba(37,211,102,.15);color:var(--accent)}
-  .score-mid{background:rgba(245,158,11,.15);color:var(--warn)}
-  .score-low{background:rgba(239,68,68,.12);color:var(--danger)}
-  .tag-chips{display:flex;gap:4px}
-  .tag-chip{font-size:10px;padding:2px 6px;border-radius:4px;background:var(--surface);border:1px solid var(--border);color:var(--muted);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .conv-main{flex:1;display:flex;flex-direction:column;overflow:hidden;border-right:1px solid var(--border)}
-  .conv-header{padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-  .conv-header-left{display:flex;align-items:center;gap:12px}
-  .contact-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff}
-  .contact-info h4{font-size:14px;font-weight:600}
-  .contact-info p{font-size:11px;color:var(--muted)}
-  .status-pill{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
-  .sp-Fechado{background:rgba(37,211,102,.15);color:var(--accent)}
-  .sp-Emandamento{background:rgba(59,130,246,.15);color:var(--info)}
-  .sp-Travado{background:rgba(245,158,11,.15);color:var(--warn)}
-  .sp-Perdido{background:rgba(239,68,68,.12);color:var(--danger)}
-  .messages-area{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:10px}
-  .day-sep{display:flex;align-items:center;gap:10px;margin:4px 0 8px}
-  .day-sep-line{flex:1;height:1px;background:var(--border)}
-  .day-sep-label{font-size:11px;color:var(--muted);background:var(--surface2);padding:2px 10px;border-radius:10px;border:1px solid var(--border)}
-  .msg-row{display:flex;gap:8px;max-width:78%}
-  .msg-row.sent{align-self:flex-end;flex-direction:row-reverse}
-  .msg-row.received{align-self:flex-start}
-  .msg-meta{font-size:10px;color:var(--muted);margin-bottom:3px;padding:0 4px}
-  .msg-row.sent .msg-meta{text-align:right}
-  .msg-bubble{padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.5;white-space:pre-wrap;word-break:break-word}
-  .msg-row.sent .msg-bubble{background:#1d4a2e;border-bottom-right-radius:3px}
-  .msg-row.received .msg-bubble{background:var(--surface2);border:1px solid var(--border);border-bottom-left-radius:3px}
-  .followup-area{border-top:1px solid var(--border);padding:12px 20px;background:var(--surface);flex-shrink:0}
-  .followup-label{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
-  .followup-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12px;line-height:1.55;color:var(--text);display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-  .followup-box span{flex:1}
-  .copy-btn{font-size:10px;padding:3px 8px;border-radius:4px;background:rgba(37,211,102,.15);color:var(--accent);border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;white-space:nowrap;flex-shrink:0}
-  .synthesis-panel{width:290px;flex-shrink:0;background:var(--surface);display:flex;flex-direction:column;overflow:hidden}
-  .synth-header{padding:14px 16px 12px;border-bottom:1px solid var(--border);flex-shrink:0}
-  .synth-header h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:12px}
-  .score-display{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-  .score-num{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;line-height:1}
-  .score-info{flex:1}
-  .score-label{font-size:12px;font-weight:600;margin-bottom:4px}
-  .score-bar-bg{height:5px;background:var(--border);border-radius:3px}
-  .score-bar-fill{height:5px;border-radius:3px}
-  .synth-body{flex:1;overflow-y:auto;padding:0 16px 16px}
-  .synth-section{margin-bottom:16px}
-  .synth-section h5{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px}
-  .summary-text{font-size:12px;color:#b0bac6;line-height:1.6}
-  .metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-  .metric-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px}
-  .metric-label{font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:3px}
-  .metric-value{font-size:14px;font-weight:700;font-family:'Syne',sans-serif}
-  .improve-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px;cursor:pointer}
-  .improve-item.good{border-left:3px solid var(--accent)}
-  .improve-item.warn{border-left:3px solid var(--warn)}
-  .improve-item.bad{border-left:3px solid var(--danger)}
-  .improve-title{font-size:12px;font-weight:600;margin-bottom:4px}
-  .improve-text{font-size:11px;color:var(--muted);margin-bottom:5px;line-height:1.4}
-  .improve-tip{font-size:11px;color:#b0bac6;background:rgba(255,255,255,.03);border-radius:4px;padding:5px 8px;border:1px solid var(--border);line-height:1.4}
-  .il-good{color:var(--accent)}
-  .il-warn{color:var(--warn)}
-  .il-bad{color:var(--danger)}
-  .obj-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px}
-  .obj-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:2px 6px;border-radius:4px;flex-shrink:0;margin-top:1px}
-  .obj-label.dada{background:rgba(239,68,68,.15);color:var(--danger)}
-  .obj-label.ideal{background:rgba(37,211,102,.15);color:var(--accent)}
-  .placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:12px;color:var(--muted)}
-  .placeholder-icon{font-size:40px;opacity:.3}
-  .placeholder-text{font-size:13px}
+
+  :root {
+    --bg: #0d0f12;
+    --surface: #161a1f;
+    --surface2: #1e2329;
+    --border: #2a2f38;
+    --text: #e8ecf0;
+    --muted: #6b7a8d;
+    --accent: #25d366;
+    --accent2: #128c7e;
+    --warn: #f59e0b;
+    --danger: #ef4444;
+    --info: #3b82f6;
+    --highlight: rgba(37,211,102,0.12);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 20px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .topbar-brand { display: flex; align-items: center; gap: 10px; }
+  .topbar-logo {
+    width: 28px; height: 28px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  .topbar-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 15px; letter-spacing: -0.3px;
+  }
+  .topbar-title span { color: var(--accent); }
+  .topbar-meta { display: flex; gap: 16px; align-items: center; }
+  .date-pill {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 12px; color: var(--muted); font-weight: 500;
+  }
+  .seller-dropdown-wrap { position: relative; }
+  .seller-pill {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 12px 4px 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    user-select: none;
+  }
+  .seller-pill:hover { border-color: var(--accent); }
+  .seller-pill.open { border-color: var(--accent); }
+  .seller-pill-caret { font-size: 9px; color: var(--muted); transition: transform 0.2s; margin-left: 2px; }
+  .seller-pill.open .seller-pill-caret { transform: rotate(180deg); }
+  .seller-avatar {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; color: #000;
+    flex-shrink: 0;
+  }
+  .seller-menu {
+    position: absolute; top: calc(100% + 8px); right: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    min-width: 220px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    z-index: 100;
+    overflow: hidden;
+    display: none;
+    animation: menuIn 0.15s ease;
+  }
+  .seller-menu.open { display: block; }
+  @keyframes menuIn {
+    from { opacity:0; transform: translateY(-6px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+  .seller-menu-header {
+    padding: 10px 14px 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .seller-menu-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: background 0.12s;
+    border-left: 3px solid transparent;
+  }
+  .seller-menu-item:hover { background: var(--surface2); }
+  .seller-menu-item.active { background: rgba(37,211,102,0.08); border-left-color: var(--accent); }
+  .seller-menu-avatar {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: #000;
+    flex-shrink: 0;
+  }
+  .seller-menu-info { flex: 1; min-width: 0; }
+  .seller-menu-name { font-size: 13px; font-weight: 600; }
+  .seller-menu-role { font-size: 10px; color: var(--muted); }
+  .seller-menu-score { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 800; }
+  .seller-menu-check { font-size: 12px; color: var(--accent); }
+
+  .app-layout { display: flex; flex: 1; overflow: hidden; }
+
+  .conv-list {
+    width: 300px; flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .conv-list-header {
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .conv-list-header h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1.2px;
+    color: var(--muted); margin-bottom: 10px;
+  }
+  .search-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 12px;
+    display: flex; align-items: center; gap: 8px;
+    color: var(--muted); font-size: 13px;
+  }
+  .conv-items { flex: 1; overflow-y: auto; padding: 8px 0; }
+  .conv-items::-webkit-scrollbar { width: 4px; }
+  .conv-items::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  .conv-item {
+    padding: 12px 16px; cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+  .conv-item:hover { background: var(--surface2); }
+  .conv-item.active { background: var(--highlight); border-left-color: var(--accent); }
+  .conv-item-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
+  .conv-name { font-weight: 600; font-size: 14px; }
+  .conv-time { font-size: 11px; color: var(--muted); }
+  .conv-preview { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 8px; }
+  .conv-footer { display: flex; justify-content: space-between; align-items: center; }
+  .score-badge { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
+  .score-good { background: rgba(37,211,102,0.15); color: var(--accent); }
+  .score-mid { background: rgba(245,158,11,0.15); color: var(--warn); }
+  .score-low { background: rgba(239,68,68,0.12); color: var(--danger); }
+  .tag-chips { display: flex; gap: 4px; }
+  .tag-chip { font-size: 10px; padding: 2px 6px; border-radius: 4px; background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
+
+  .conv-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; border-right: 1px solid var(--border); }
+  .conv-header {
+    padding: 12px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .conv-header-left { display: flex; align-items: center; gap: 12px; }
+  .contact-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: linear-gradient(135deg, #3b4a6b, #5b7aaa);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+  }
+  .contact-info h4 { font-size: 14px; font-weight: 600; }
+  .contact-info p { font-size: 11px; color: var(--muted); }
+  .conv-header-actions { display: flex; gap: 8px; }
+  .btn-sm {
+    padding: 6px 14px; border-radius: 6px;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+    border: none; transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+  }
+  .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-primary { background: var(--accent); color: #000; }
+  .btn-primary:hover { opacity: 0.88; }
+
+  .messages-area {
+    flex: 1; overflow-y: auto; padding: 20px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .messages-area::-webkit-scrollbar { width: 4px; }
+  .messages-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .day-sep { display: flex; align-items: center; gap: 10px; margin: 4px 0 8px; }
+  .day-sep-line { flex: 1; height: 1px; background: var(--border); }
+  .day-sep-label { font-size: 11px; color: var(--muted); background: var(--surface2); padding: 2px 10px; border-radius: 10px; border: 1px solid var(--border); }
+
+  .msg-row { display: flex; gap: 8px; max-width: 78%; }
+  .msg-row.sent { align-self: flex-end; flex-direction: row-reverse; }
+  .msg-row.received { align-self: flex-start; }
+
+  .msg-bubble {
+    padding: 10px 14px; border-radius: 12px;
+    font-size: 13.5px; line-height: 1.5;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .msg-row.sent .msg-bubble { background: #1d4a2e; border-bottom-right-radius: 3px; }
+  .msg-row.received .msg-bubble { background: var(--surface2); border: 1px solid var(--border); border-bottom-left-radius: 3px; }
+  .msg-bubble.hl-good { background: rgba(37,211,102,0.18) !important; border: 1.5px solid rgba(37,211,102,0.45) !important; }
+  .msg-bubble.hl-warn { background: rgba(245,158,11,0.15) !important; border: 1.5px solid rgba(245,158,11,0.4) !important; }
+  .msg-bubble.hl-bad { background: rgba(239,68,68,0.14) !important; border: 1.5px solid rgba(239,68,68,0.4) !important; }
+
+  .insight-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10px; font-weight: 600;
+    padding: 2px 7px; border-radius: 4px;
+    margin-top: 6px; cursor: pointer; transition: opacity 0.15s;
+  }
+  .insight-tag:hover { opacity: 0.78; }
+  .it-good { background: rgba(37,211,102,0.2); color: var(--accent); }
+  .it-warn { background: rgba(245,158,11,0.2); color: var(--warn); }
+  .it-bad { background: rgba(239,68,68,0.16); color: var(--danger); }
+
+  .msg-time { font-size: 10px; color: var(--muted); margin-top: 3px; display: block; text-align: right; }
+
+  .synthesis-panel {
+    width: 290px; flex-shrink: 0;
+    background: var(--surface);
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .synth-header { padding: 14px 16px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .synth-header h3 { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 12px; }
+  .score-ring-wrap { display: flex; align-items: center; gap: 14px; }
+  .score-ring { position: relative; width: 58px; height: 58px; flex-shrink: 0; }
+  .score-ring svg { transform: rotate(-90deg); }
+  .score-ring-label {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 800;
+  }
+  .score-meta h4 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; }
+  .score-meta p { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .score-trend { font-size: 11px; margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+
+  .synth-body { flex: 1; overflow-y: auto; padding: 14px 16px; display: flex; flex-direction: column; gap: 16px; }
+  .synth-body::-webkit-scrollbar { width: 4px; }
+  .synth-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .synth-section h5 { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 8px; }
+  .summary-text { font-size: 12.5px; line-height: 1.6; color: #b0bac6; }
+
+  .improve-item {
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 12px; background: var(--surface2);
+    cursor: pointer; transition: all 0.2s;
+    position: relative; overflow: hidden; margin-bottom: 8px;
+  }
+  .improve-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+  .improve-item.good::before { background: var(--accent); }
+  .improve-item.warn::before { background: var(--warn); }
+  .improve-item.bad::before { background: var(--danger); }
+  .improve-item:hover { border-color: var(--accent); transform: translateX(2px); }
+  .improve-item.active-link { border-color: var(--accent) !important; box-shadow: 0 0 0 2px rgba(37,211,102,0.15); }
+  .improve-item-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .improve-item-label { font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+  .il-good { color: var(--accent); }
+  .il-warn { color: var(--warn); }
+  .il-bad { color: var(--danger); }
+  .improve-item-arrow { font-size: 12px; color: var(--muted); transition: color 0.15s; }
+  .improve-item:hover .improve-item-arrow { color: var(--accent); }
+  .improve-title { font-size: 12.5px; font-weight: 600; margin-bottom: 4px; }
+  .improve-text { font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+  .improve-link-msg { margin-top: 7px; font-size: 10.5px; color: var(--accent); display: flex; align-items: center; gap: 4px; opacity: 0.8; }
+
+  .metrics-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .metric-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+  .metric-card-label { font-size: 10px; color: var(--muted); font-weight: 500; }
+  .metric-card-value { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 800; margin-top: 2px; }
+  .mv-good { color: var(--accent); }
+  .mv-warn { color: var(--warn); }
+  .mv-bad { color: var(--danger); }
+  .metric-card-sub { font-size: 10px; color: var(--muted); margin-top: 1px; }
+
+  .followup-area {
+    border-top: 1px solid var(--border);
+    padding: 12px 20px;
+    background: var(--surface);
+    flex-shrink: 0;
+  }
+  .followup-label { font-size: 10px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 6px; }
+  .followup-box {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px;
+    font-size: 12px; line-height: 1.55; color: var(--text);
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;
+  }
+  .followup-box span { flex: 1; }
+  .copy-btn {
+    font-size: 10px; padding: 3px 8px; border-radius: 4px;
+    background: rgba(37,211,102,.15); color: var(--accent);
+    border: none; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    font-weight: 600; white-space: nowrap; flex-shrink: 0;
+  }
+
+  .tooltip-popup {
+    position: fixed; background: #1a1f28;
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px 14px; max-width: 230px;
+    z-index: 999; display: none;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5); pointer-events: none;
+  }
+  .tooltip-popup.visible { display: block; }
+  .tooltip-popup h6 { font-size: 11px; font-weight: 700; margin-bottom: 5px; }
+  .tooltip-popup p { font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+
+  @keyframes flash { 0%,100%{opacity:1} 50%{opacity:0.5} }
+  .flash { animation: flash 0.4s 2; }
 </style>
 </head>
 <body>
+
 <div class="topbar">
   <div class="topbar-brand">
     <div class="topbar-logo">🌱</div>
-    <div class="topbar-title">SalesCoach <span>AI</span> — Germinare</div>
+    <div class="topbar-title">Sales<span>Coach</span> AI — Germinare</div>
   </div>
   <div class="topbar-meta">
-    <span class="pill">📅 2026-05-13</span>
-    <span class="pill">✦ 1 negociações de 9 contatos</span>
+    <div class="date-pill">📅 Quarta, 13 de Maio de 2026</div>
+    <div class="seller-dropdown-wrap" id="sellerWrap">
+      <div class="seller-pill" id="sellerPill" onclick="toggleSellerMenu()">
+        <div class="seller-avatar" id="topSellerAvatar" style="background:linear-gradient(135deg,#128c7e,#25d366)">VG</div>
+        <span id="topSellerName">Vanessa Germinare</span>
+        <span class="seller-pill-caret" id="sellerCaret">▼</span>
+      </div>
+      <div class="seller-menu" id="sellerMenu">
+        <div class="seller-menu-header">Vendedor</div>
+        <div id="sellerMenuItems"></div>
+      </div>
+    </div>
   </div>
 </div>
+
 <div class="app-layout">
   <div class="conv-list">
     <div class="conv-list-header">
       <h3>Negociações do Dia</h3>
-      <div class="search-box">
-        <span style="color:var(--muted);font-size:13px">🔍</span>
-        <input type="text" placeholder="Buscar conversa..." id="searchInput" oninput="filterList()">
-      </div>
+      <div class="search-box">🔍 <span style="color:#4a5568">Buscar contato...</span></div>
     </div>
     <div class="conv-items" id="convList"></div>
   </div>
-  <div class="conv-main" id="convMain">
-    <div class="placeholder">
-      <div class="placeholder-icon">💬</div>
-      <div class="placeholder-text">Selecione uma negociação</div>
+
+  <div class="conv-main">
+    <div class="conv-header">
+      <div class="conv-header-left">
+        <div class="contact-avatar" id="convAvatar">FA</div>
+        <div class="contact-info">
+          <h4 id="convContactName">Fabricio</h4>
+          <p id="convContactSub">9 mensagens · 2h42min</p>
+        </div>
+      </div>
+      <div class="conv-header-actions">
+        <button class="btn-sm btn-outline" onclick="copyFollowup()">💬 Copiar Follow-up</button>
+      </div>
+    </div>
+    <div class="messages-area" id="messagesArea"></div>
+    <div class="followup-area" id="followupArea" style="display:none">
+      <div class="followup-label">💬 Follow-up sugerido pela IA</div>
+      <div class="followup-box">
+        <span id="followupText"></span>
+        <button class="copy-btn" onclick="copyFollowup()">Copiar</button>
+      </div>
     </div>
   </div>
-  <div class="synthesis-panel" id="synthPanel">
+
+  <div class="synthesis-panel">
     <div class="synth-header">
-      <h3>Análise IA</h3>
-      <div style="font-size:12px;color:var(--muted)">— <span id="synthName">Selecione</span></div>
+      <h3>Análise da Conversa</h3>
+      <div class="score-ring-wrap">
+        <div class="score-ring">
+          <svg viewBox="0 0 58 58" width="58" height="58">
+            <circle cx="29" cy="29" r="24" fill="none" stroke="#2a2f38" stroke-width="5"/>
+            <circle id="scoreArc" cx="29" cy="29" r="24" fill="none" stroke="#ef4444" stroke-width="5"
+              stroke-dasharray="150.8" stroke-dashoffset="98.0" stroke-linecap="round"/>
+          </svg>
+          <div class="score-ring-label" id="scoreLabel" style="color:var(--danger)">3.5</div>
+        </div>
+        <div class="score-meta">
+          <h4 id="scoreTitle">Baixo foco comercial</h4>
+          <p id="scoreSubtitle">Negociação travada</p>
+          <div class="score-trend" id="scoreTrend"><span style="color:var(--danger)">↓ abaixo da média</span></div>
+        </div>
+      </div>
     </div>
-    <div class="synth-body" id="synthBody">
-      <div style="padding:20px 0;text-align:center;color:var(--muted);font-size:12px">Selecione uma conversa para ver a análise</div>
-    </div>
+    <div class="synth-body" id="synthBody"></div>
   </div>
 </div>
+
+<div class="tooltip-popup" id="tooltip">
+  <h6 id="tooltipTitle">💡 Dica</h6>
+  <p id="tooltipBody"></p>
+</div>
+
 <script>
-var CONVS=[{"id": 0, "chat": "Fabricio", "score": 3.5, "status": "Travado", "scoreLabel": "Baixo foco comercial", "summary": "O vendedor ignorou a oportunidade de fechamento imediato de 90 toneladas para discutir processos burocráticos. A negociação de preço ficou pendente e sem resposta objetiva.", "vendedor": "Fabricio", "produto": "DDGS", "metrics": {"respostaMed": "115min", "objecoes": "1", "conversao": "Não", "msgs": "9"}, "improvements": [{"type": "bad", "label": "🚨 Melhora Urgente", "title": "Ignorou o Fechamento", "text": "Fabricio mudou de assunto sem responder sobre o BID de R$ 1.180 ou a possibilidade de fechar a R$ 1.200.", "tip": "Responda sempre o status da carga atual (fechamento) antes de trazer novas demandas de prospecção.", "msgRef": "Levamos o 1200?"}, {"type": "warn", "label": "⚠️ Atenção", "title": "Tempo de Reação", "text": "Demorou quase duas horas para responder a uma mensagem decisiva de fechamento.", "tip": "No mercado de brokers, a velocidade entre o BID e a resposta do fornecedor define a margem e o fechamento.", "msgRef": "[11:41] Vanessa... [13:36] Fabricio"}], "objecoes": [{"objecao": "Restrição operacional para revenda de DDGS ensacado por cooperativa.", "resposta_dada": "Aceitação passiva ('blz' e 'sim').", "resposta_ideal": "Propor solução alternativa, como faturamento direto aos cooperados ou industrialização por encomenda."}], "followupMsg": "Vanessa, sobre as 90t: o cliente não aceita os R$ 1.200? Vou tentar apertar o fornecedor nos R$ 1.180 agora. Sobre a cooperativa de Maceió, já estou falando com o Lelé para ver se conseguimos faturar via 'ordem de entrega' para os cooperados e resolver o bloqueio da revenda.", "initials": "FA", "avatarGrad": "linear-gradient(135deg,#3b3b6b,#5b5baa)", "time": "14:22", "preview": "blz", "msgs": 9, "tags": ["DDGS", "Travado"], "messages": [{"from_me": true, "sender": "Vanessa", "time": "11:40", "text": "Leandro precisava chegar esse aqui a R$1.180 hein , fechar 90 ton"}, {"from_me": true, "sender": "Vanessa", "time": "11:41", "text": "Levamos o 1200?"}, {"from_me": true, "sender": "Vanessa", "time": "11:41", "text": "Bom dia"}, {"from_me": false, "sender": "Fabricio", "time": "11:44", "text": "[unknown]"}, {"from_me": false, "sender": "Fabricio", "time": "13:36", "text": "Senhora preciso saber como fica o processo de revenda do ddgs , eu capitei uma cooperativa em Maceió eles querem comprar tanto para consumo próprio deles na produçao de raçao deles porém eles querem ensacar esse produto para revender para os cooperados"}, {"from_me": true, "sender": "Vanessa", "time": "13:44", "text": "a priori estava barrado"}, {"from_me": true, "sender": "Vanessa", "time": "13:44", "text": "flaa com o lele"}, {"from_me": false, "sender": "Fabricio", "time": "13:49", "text": "blz"}, {"from_me": true, "sender": "Vanessa", "time": "14:17", "text": "me avisa dps"}, {"from_me": true, "sender": "Vanessa", "time": "14:17", "text": "como que ficou"}, {"from_me": false, "sender": "Fabricio", "time": "14:22", "text": "si"}, {"from_me": false, "sender": "Fabricio", "time": "14:22", "text": "sim"}]}];
-function esc(s){if(!s)return '';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function scoreColor(s){return s>=8?'var(--accent)':s>=6?'var(--warn)':'var(--danger)'}
-function scoreClass(s){return s>=8?'score-good':s>=6?'score-mid':'score-low'}
-function renderList(filter){
-  filter=(filter||'').toLowerCase();
-  var el=document.getElementById('convList');
-  el.innerHTML=CONVS.filter(function(c){return !filter||c.chat.toLowerCase().includes(filter)}).map(function(c){
-    var sc=scoreClass(c.score);
-    return '<div class="conv-item" id="ci-'+c.id+'" onclick="openConv('+c.id+')">'
-      +'<div class="conv-item-top"><span class="conv-name">'+esc(c.chat)+'</span><span class="conv-time">'+c.time+'</span></div>'
-      +'<div class="conv-preview">'+esc(c.preview)+'</div>'
-      +'<div class="conv-footer"><span class="score-badge '+sc+'">◆ '+c.score+'</span>'
-      +'<div class="tag-chips">'+c.tags.filter(Boolean).map(function(t){return '<span class="tag-chip">'+esc(t)+'</span>'}).join('')+'</div></div>'
-      +'</div>';
-  }).join('');
+const sellers = [{"id": 0, "name": "Vanessa Germinare", "initials": "VG", "role": "Gestora Comercial", "grad": "linear-gradient(135deg,#128c7e,#25d366)", "avgScore": 3.5}];
+const allConversations = {"0": [{"id": 0, "name": "Fabricio", "initials": "FA", "avatarGrad": "linear-gradient(135deg,#3b3b6b,#5b5baa)", "time": "14:22", "preview": "blz", "score": 3.5, "msgs": 12, "duration": "2h42min", "tags": ["DDGS", "Travado"], "scoreLabel": "Baixo foco comercial", "scoreTrend": "↓ abaixo da média", "trendColor": "var(--danger)", "scoreSubtitle": "Negociação travada", "arcOffset": 98.0, "arcColor": "#ef4444", "scoreColor": "var(--danger)", "summary": "O vendedor ignorou a oportunidade de fechamento imediato de 90 toneladas de DDGS para discutir processos burocráticos. Demorou ~2h para responder e aceitou passivamente a restrição de revenda da cooperativa sem propor alternativa.", "metrics": [{"label": "Resposta Média", "value": "115min", "cls": "mv-bad", "sub": "Tempo crítico"}, {"label": "Objeções", "value": "1", "cls": "mv-warn", "sub": "Não contornada"}, {"label": "Mensagens", "value": "12", "cls": "", "sub": ""}, {"label": "Conversão", "value": "Não", "cls": "mv-bad", "sub": "Negociação travada"}], "improvements": [{"type": "bad", "ilcls": "il-bad", "label": "🚨 Melhora Urgente", "title": "Ignorou o Fechamento", "text": "Fabricio mudou de assunto sem responder sobre o BID de R$ 1.180 ou a possibilidade de fechar a R$ 1.200.", "msgIdx": 1, "tip": "Responda sempre o status da carga atual antes de trazer novas demandas. 'Levamos o 1200?' ficou sem resposta."}, {"type": "warn", "ilcls": "il-warn", "label": "⚠️ Atenção", "title": "Aceitação Passiva de Restrição", "text": "Respondeu 'blz' para uma restrição operacional que poderia ter sido contornada com faturamento direto aos cooperados.", "msgIdx": 7, "tip": "Proponha alternativa: faturamento direto aos cooperados ou industrialização por encomenda para contornar a barreira da revenda."}, {"type": "bad", "ilcls": "il-bad", "label": "🚨 Melhora Urgente", "title": "Tempo de Resposta Crítico", "text": "Demorou quase 2 horas (11:41 → 13:36) para responder a uma mensagem de fechamento decisiva.", "msgIdx": 3, "tip": "No mercado de brokers de grãos, a velocidade entre o BID e a resposta define a margem e o fechamento. Responda em minutos, não horas."}], "messages": [{"type": "sent", "text": "Leandro precisava chegar esse aqui a R$1.180 hein , fechar 90 ton", "time": "11:40"}, {"type": "sent", "text": "Levamos o 1200?", "time": "11:41", "hl": "bad", "itype": "bad", "ilabel": "🚨 Fechamento não respondido", "ikey": 0}, {"type": "sent", "text": "Bom dia", "time": "11:41"}, {"type": "recv", "text": "[unknown]", "time": "11:44"}, {"type": "recv", "text": "Senhora preciso saber como fica o processo de revenda do ddgs , eu capitei uma cooperativa em Maceió eles querem comprar tanto para consumo próprio deles na produçao de raçao deles porém eles querem ensacar esse produto para revender para os cooperados", "time": "13:36"}, {"type": "sent", "text": "a priori estava barrado", "time": "13:44"}, {"type": "sent", "text": "flaa com o lele", "time": "13:44"}, {"type": "recv", "text": "blz", "time": "13:49", "hl": "warn", "itype": "warn", "ilabel": "⚠️ Aceitação passiva da restrição", "ikey": 1}, {"type": "sent", "text": "me avisa dps", "time": "14:17"}, {"type": "sent", "text": "como que ficou", "time": "14:17"}, {"type": "recv", "text": "si", "time": "14:22"}, {"type": "recv", "text": "sim", "time": "14:22"}]}]};
+
+// followupMsg por conversa
+const followups = {
+  "0_0": "Vanessa, sobre as 90t: o cliente não aceita os R$ 1.200? Vou tentar apertar o fornecedor nos R$ 1.180 agora. Sobre a cooperativa de Maceió, já estou falando com o Lelé para ver se conseguimos faturar via 'ordem de entrega' para os cooperados e resolver o bloqueio da revenda."
+};
+
+let activeSeller = 0;
+let activeConv = 0;
+let conversations = allConversations["0"];
+
+function scoreClass(s) { return s>=8?'score-good':s>=6?'score-mid':'score-low'; }
+
+function renderSellerMenu() {
+  document.getElementById('sellerMenuItems').innerHTML = sellers.map(s => `
+    <div class="seller-menu-item ${s.id===activeSeller?'active':''}" onclick="selectSeller(${s.id})">
+      <div class="seller-menu-avatar" style="background:${s.grad}">${s.initials}</div>
+      <div class="seller-menu-info">
+        <div class="seller-menu-name">${s.name}</div>
+        <div class="seller-menu-role">${s.role}</div>
+      </div>
+      <div class="seller-menu-score" style="color:${s.avgScore>=8?'var(--accent)':s.avgScore>=6?'var(--warn)':'var(--danger)'}">${s.avgScore}</div>
+      ${s.id===activeSeller?'<div class="seller-menu-check">✓</div>':''}
+    </div>`).join('');
 }
-function filterList(){renderList(document.getElementById('searchInput').value)}
-function openConv(id){
-  document.querySelectorAll('.conv-item').forEach(function(e){e.classList.remove('active')});
-  var el=document.getElementById('ci-'+id);
-  if(el) el.classList.add('active');
-  var c=CONVS.find(function(x){return x.id===id});
-  if(!c) return;
-  var color=scoreColor(c.score);
-  var spClass='sp-'+c.status.replace(/ /g,'');
-  var main=document.getElementById('convMain');
-  main.innerHTML='<div class="conv-header"><div class="conv-header-left">'
-    +'<div class="contact-avatar" style="background:'+esc(c.avatarGrad)+'">'+esc(c.initials)+'</div>'
-    +'<div class="contact-info"><h4>'+esc(c.chat)+'</h4><p>'+esc(c.vendedor)+' · '+c.msgs+' msgs</p></div></div>'
-    +'<span class="status-pill '+spClass+'">'+esc(c.status)+'</span></div>'
-    +'<div class="messages-area" id="msgsArea">'
-    +'<div class="day-sep"><div class="day-sep-line"></div><div class="day-sep-label">2026-05-13</div><div class="day-sep-line"></div></div>'
-    +(c.messages&&c.messages.length?c.messages.map(function(m){
-      var cls=m.from_me?'sent':'received';
-      return '<div class="msg-row '+cls+'">'
-        +'<div><div class="msg-meta">'+esc(m.sender)+' · '+esc(m.time)+'</div>'
-        +'<div class="msg-bubble">'+esc(m.text)+'</div></div></div>';
-    }).join(''):'<div style="text-align:center;color:var(--muted);font-size:12px;padding:20px">Mensagens não disponíveis</div>')
-    +'</div>'
-    +'<div class="followup-area"><div class="followup-label">💬 Follow-up sugerido pela IA</div>'
-    +'<div class="followup-box"><span id="followupText">'+esc(c.followupMsg)+'</span>'
-    +'<button class="copy-btn" onclick="copyFollowup()">Copiar</button></div></div>';
-  var msgsEl=document.getElementById('msgsArea');
-  if(msgsEl) msgsEl.scrollTop=msgsEl.scrollHeight;
-  renderSynth(c);
+
+function toggleSellerMenu() {
+  const menu = document.getElementById('sellerMenu');
+  const pill = document.getElementById('sellerPill');
+  const isOpen = menu.classList.contains('open');
+  menu.classList.toggle('open');
+  pill.classList.toggle('open');
+  if(!isOpen) renderSellerMenu();
 }
-function renderSynth(c){
-  document.getElementById('synthName').textContent=c.chat;
-  var color=scoreColor(c.score);
-  var pct=Math.round(c.score*10);
-  var sb=document.getElementById('synthBody');
-  sb.innerHTML='<div class="synth-section">'
-    +'<div class="score-display">'
-    +'<div class="score-num" style="color:'+color+'">'+c.score+'</div>'
-    +'<div class="score-info"><div class="score-label" style="color:'+color+'">'+esc(c.scoreLabel)+'</div>'
-    +'<div class="score-bar-bg"><div class="score-bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div></div></div>'
-    +'<div class="summary-text">'+esc(c.summary)+'</div></div>'
-    +'<div class="synth-section"><h5>📊 Métricas</h5><div class="metrics-grid">'
-    +'<div class="metric-card"><div class="metric-label">Resposta Méd.</div><div class="metric-value">'+esc(c.metrics.respostaMed||'--')+'</div></div>'
-    +'<div class="metric-card"><div class="metric-label">Msgs</div><div class="metric-value">'+esc(c.metrics.msgs||c.msgs)+'</div></div>'
-    +'<div class="metric-card"><div class="metric-label">Objeções</div><div class="metric-value">'+esc(c.metrics.objecoes||'0')+'</div></div>'
-    +'<div class="metric-card"><div class="metric-label">Conversão</div><div class="metric-value">'+esc(c.metrics.conversao||'--')+'</div></div>'
-    +'</div></div>'
-    +'<div class="synth-section"><h5>🎯 Análise</h5>'
-    +c.improvements.map(function(imp){
-      return '<div class="improve-item '+imp.type+'">'
-        +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">'
-        +'<span style="font-size:11px;font-weight:700" class="il-'+imp.type+'">'+esc(imp.label)+'</span></div>'
-        +'<div class="improve-title">'+esc(imp.title)+'</div>'
-        +'<div class="improve-text">'+esc(imp.text)+'</div>'
-        +'<div class="improve-tip">💡 '+esc(imp.tip)+'</div>'
-        +'</div>';
-    }).join('')+'</div>'
-    +(c.objecoes&&c.objecoes.length?
-      '<div class="synth-section"><h5>🛡 Objeções</h5>'
-      +c.objecoes.map(function(o){
-        return '<div class="obj-card">'
-          +'<div style="font-size:12px;font-weight:600;margin-bottom:6px">'+esc(o.objecao)+'</div>'
-          +(o.resposta_dada?'<div style="display:flex;gap:6px;margin-bottom:4px;align-items:flex-start"><span class="obj-label dada">Como reagiu</span><span style="font-size:11px;color:#b0bac6;line-height:1.4;flex:1">'+esc(o.resposta_dada)+'</span></div>':'')
-          +(o.resposta_ideal?'<div style="display:flex;gap:6px;align-items:flex-start"><span class="obj-label ideal">Ideal</span><span style="font-size:11px;color:#b0bac6;line-height:1.4;flex:1">'+esc(o.resposta_ideal)+'</span></div>':'')
-          +'</div>';
-      }).join('')+'</div>'
-    :'');
+
+function selectSeller(idx) {
+  activeSeller = idx;
+  conversations = allConversations[String(idx)] || [];
+  activeConv = 0;
+  const s = sellers[idx];
+  document.getElementById('topSellerAvatar').textContent = s.initials;
+  document.getElementById('topSellerAvatar').style.background = s.grad;
+  document.getElementById('topSellerName').textContent = s.name;
+  document.getElementById('sellerMenu').classList.remove('open');
+  document.getElementById('sellerPill').classList.remove('open');
+  if(conversations.length > 0) selectConv(0);
 }
-function copyFollowup(){
-  var text=document.getElementById('followupText').textContent;
-  navigator.clipboard.writeText(text).then(function(){
-    var btn=document.querySelector('.copy-btn');
-    if(btn){btn.textContent='✓ Copiado';setTimeout(function(){btn.textContent='Copiar'},2000)}
+
+document.addEventListener('click', e => {
+  const wrap = document.getElementById('sellerWrap');
+  if(!wrap.contains(e.target)) {
+    document.getElementById('sellerMenu').classList.remove('open');
+    document.getElementById('sellerPill').classList.remove('open');
+  }
+});
+
+function renderConvList() {
+  document.getElementById('convList').innerHTML = conversations.map((c,i) => `
+    <div class="conv-item ${i===activeConv?'active':''}" onclick="selectConv(${i})">
+      <div class="conv-item-top">
+        <div class="conv-name">${c.name}</div>
+        <div class="conv-time">${c.time}</div>
+      </div>
+      <div class="conv-preview">${c.preview}</div>
+      <div class="conv-footer">
+        <div class="score-badge ${scoreClass(c.score)}">⭐ ${c.score}</div>
+        <div class="tag-chips">${c.tags.map(t=>`<div class="tag-chip">${t}</div>`).join('')}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderMessages(conv) {
+  const area = document.getElementById('messagesArea');
+  area.innerHTML = `
+    <div class="day-sep"><div class="day-sep-line"></div><div class="day-sep-label">Hoje · Quarta, 13 de Maio de 2026</div><div class="day-sep-line"></div></div>
+    ${conv.messages.map((m,i)=>`
+      <div class="msg-row ${m.type==='sent'?'sent':'received'}" id="msg-${i}">
+        <div class="msg-bubble${m.hl?' hl-'+m.hl:''}">
+          <span>${m.text}</span>
+          ${m.itype!==undefined?`<div><div class="insight-tag it-${m.itype}" onclick="fromMsg(${m.ikey},${i})">${m.ilabel} →</div></div>`:''}
+          <span class="msg-time">${m.time}</span>
+        </div>
+      </div>`).join('')}`;
+  area.scrollTop = area.scrollHeight;
+}
+
+function renderSynthesis(conv) {
+  document.getElementById('scoreArc').style.stroke = conv.arcColor;
+  document.getElementById('scoreArc').setAttribute('stroke-dashoffset', conv.arcOffset);
+  document.getElementById('scoreLabel').textContent = conv.score;
+  document.getElementById('scoreLabel').style.color = conv.scoreColor;
+  document.getElementById('scoreTitle').textContent = conv.scoreLabel;
+  document.getElementById('scoreSubtitle').textContent = conv.scoreSubtitle;
+  document.getElementById('scoreTrend').innerHTML = `<span style="color:${conv.trendColor}">${conv.scoreTrend}</span>`;
+
+  document.getElementById('synthBody').innerHTML = `
+    <div class="synth-section">
+      <h5>📋 Síntese</h5>
+      <p class="summary-text">${conv.summary}</p>
+    </div>
+    <div class="synth-section">
+      <h5>📊 Métricas</h5>
+      <div class="metrics-row">
+        ${conv.metrics.map(m=>`<div class="metric-card"><div class="metric-card-label">${m.label}</div><div class="metric-card-value ${m.cls}">${m.value}</div><div class="metric-card-sub">${m.sub}</div></div>`).join('')}
+      </div>
+    </div>
+    <div class="synth-section">
+      <h5>💡 Análise</h5>
+      ${conv.improvements.map((imp,idx)=>`
+        <div class="improve-item ${imp.type}" id="imp-${idx}" onclick="fromImp(${idx},${imp.msgIdx})">
+          <div class="improve-item-header">
+            <div class="improve-item-label ${imp.ilcls}">${imp.label}</div>
+            <div class="improve-item-arrow">↗</div>
+          </div>
+          <div class="improve-title">${imp.title}</div>
+          <div class="improve-text">${imp.text}</div>
+          <div class="improve-link-msg">🔗 Ver mensagem vinculada</div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function selectConv(idx) {
+  activeConv = idx;
+  const c = conversations[idx];
+  document.getElementById('convAvatar').textContent = c.initials;
+  document.getElementById('convAvatar').style.background = c.avatarGrad;
+  document.getElementById('convContactName').textContent = c.name;
+  document.getElementById('convContactSub').textContent = `${c.msgs} mensagens · ${c.duration} de conversa`;
+  const fup = followups[activeSeller+'_'+idx] || '';
+  document.getElementById('followupText').textContent = fup;
+  document.getElementById('followupArea').style.display = fup ? '' : 'none';
+  renderConvList(); renderMessages(c); renderSynthesis(c);
+}
+
+function fromImp(impIdx, msgIdx) {
+  document.querySelectorAll('.improve-item').forEach(e=>e.classList.remove('active-link'));
+  const ie = document.getElementById('imp-'+impIdx);
+  if(ie) ie.classList.add('active-link');
+  const me = document.getElementById('msg-'+msgIdx);
+  if(me) { me.scrollIntoView({behavior:'smooth',block:'center'}); me.classList.add('flash'); setTimeout(()=>me.classList.remove('flash'),900); }
+}
+
+function fromMsg(impIdx, msgIdx) {
+  fromImp(impIdx, msgIdx);
+  const ie = document.getElementById('imp-'+impIdx);
+  if(ie) {
+    ie.scrollIntoView({behavior:'smooth',block:'center'});
+    const conv = conversations[activeConv];
+    const imp = conv.improvements[impIdx];
+    if(imp) {
+      const me = document.getElementById('msg-'+msgIdx);
+      const tt = document.getElementById('tooltip');
+      if(me) {
+        const r = me.getBoundingClientRect();
+        document.getElementById('tooltipTitle').textContent = imp.title;
+        document.getElementById('tooltipBody').textContent = imp.tip;
+        tt.style.left = Math.min(r.right+8, window.innerWidth-245)+'px';
+        tt.style.top = r.top+'px';
+        tt.classList.add('visible');
+        setTimeout(()=>tt.classList.remove('visible'),4000);
+      }
+    }
+  }
+}
+
+function copyFollowup() {
+  const text = document.getElementById('followupText').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btns = document.querySelectorAll('.copy-btn, .btn-outline');
+    btns.forEach(b => { if(b.textContent.includes('Follow') || b.textContent.includes('Copiar')) { const orig = b.textContent; b.textContent = '✓ Copiado'; setTimeout(()=>b.textContent=orig,2000); } });
   });
 }
-renderList();
-if(CONVS.length>0) openConv(0);
+
+selectSeller(0);
 </script>
 </body>
 </html>
